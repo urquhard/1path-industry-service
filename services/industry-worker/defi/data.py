@@ -192,8 +192,9 @@ class Data(BaseSettings):
         # Calculate log mcap factor and log tvl
         log_mcap = np.log(mcap).melt(ignore_index = False).reset_index().\
         rename(columns={"value": "factor_log_mc", 'index': 'date'})
-        log_tvl = np.log(DNV.groupby(["gecko_id", 'date']).agg({'TVL':'sum'})).reset_index().\
-        rename(columns={"TVL": "log_tvl"})
+        log_tvl = np.log(DNV.groupby(["gecko_id", 'date']).agg({'TVL': lambda x: x.sum(min_count=1)}).reset_index().\
+                         pivot(index= 'date', columns = 'gecko_id', values = 'TVL').\
+                         ffill()).reset_index().melt(id_vars=['date']).rename(columns={"value": "log_tvl"})
 
         # Quarantine flag (tvl and market cap should be not na X time ago)
 
