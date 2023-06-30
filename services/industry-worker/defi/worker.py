@@ -74,7 +74,6 @@ def get_all_llama_slugs():
     no_gecko['gecko_id'][no_gecko['symbol'] == 'MEGA'] = 'megaton-finance'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'MER'] = 'mercurial'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'MET'] = 'metronome'
-#     no_gecko['gecko_id'][no_gecko['slug'] == 'mm-finance-arbitrum'] = 'mmfinance-arbitrum'
     no_gecko['gecko_id'][no_gecko['slug'] == 'mm-finance-cronos'] = 'mmfinance'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'MMO'] = 'mad-meerkat-optimizer'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'MORPHO'] = 'morpho'
@@ -123,6 +122,14 @@ def get_all_llama_slugs():
     llama_data = llama_data.sort_values('symbol')
     llama_data = llama_data[llama_data['gecko_id'].isna() == False].reset_index(drop = True)
     
+    chain_data = pd.DataFrame(columns = llama_data.columns)
+    chain_data.loc[0] = ['Avalanche', '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7', 'AVAX', 'Avalanche', None, 'avalanche-2', 'Other', None]
+    chain_data.loc[1] = ['BNB', '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', 'BNB', 'Binance', None, 'binancecoin', 'Other', None]
+    chain_data.loc[2] = ['Ethereum', '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', 'ETH', 'Ethereum', None, 'ethereum', 'Other', None]
+    chain_data.loc[3] = ['Polygon', '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270', 'MATIC', 'Polygon', None, 'matic-network', 'Other', None]
+
+    llama_data = pd.concat([llama_data, chain_data]).reset_index(drop = True)
+
     return llama_data
 
 # Функция обрезает ряды из TVL по введенным датам и заполняет пробелы в данных
@@ -152,10 +159,9 @@ def fill_series_with_nans(series, start_time, end_time):
 # Функция выкачивает TVL из DefiLlama и записывает их в словарик
 
 def get_available_TVL_from_DefiLlama(llama_data, start_date, end_date):
-
     
-    chain_tokens_series = pd.Series(['Ethereum', 'Binance', 'Polygon', 'Avalanche', 'Kava'], \
-                                index = ['ETH', 'BNB', 'MATIC', 'AVAX', 'KAVA'])
+    chain_tokens_series = pd.Series(['Ethereum', 'Binance', 'Polygon', 'Avalanche'], \
+                                index = ['ETH', 'BNB', 'MATIC', 'AVAX'])
 
     count_protocol = 0
     tvl_dict = {}
@@ -164,8 +170,7 @@ def get_available_TVL_from_DefiLlama(llama_data, start_date, end_date):
 
         ID = llama_data['slug'][i]
         token = llama_data['symbol'][i]
-
-        if token in chain_tokens_series:
+        if token in list(chain_tokens_series.index):
             continue
         
         key_token = llama_data['symbol'][i]
@@ -207,7 +212,28 @@ def get_available_TVL_from_DefiLlama(llama_data, start_date, end_date):
             
         tvl_dict[key_token] = mini_dict
 
+
+    print()
+    print('Loading TVL of necessary chains')
+    for chain_token in tqdm(chain_tokens_series.index):
+        mini_dict = {}
+        llama_chain_endpoint = 'https://api.llama.fi/v2/historicalChainTvl/' + chain_tokens_series[chain_token]
+        request = requests.get(llama_chain_endpoint).json()
+        chain_tvls = pd.DataFrame(request)
+        chain_tvls['date'] = pd.to_datetime(chain_tvls['date'], unit = 's')
+        chain_tvls['date'] = chain_tvls['date'].apply(lambda x: x.round(freq = 'D'))
+        chain_tvl_series = pd.Series(chain_tvls['tvl'].values, index = chain_tvls['date'])
+        cutted_chain_tvls = cut_and_fill_series(chain_tvl_series, start_date, end_date)
+        filled_chain_tvls = fill_series_with_nans(cutted_chain_tvls, start_date, end_date)
+        filled_chain_tvls.index = filled_chain_tvls.index.strftime('%Y-%m-%d')
+        mini_dict[chain_tokens_series[chain_token]] = filled_chain_tvls.to_dict()
+        tvl_dict[chain_token] = mini_dict
+
+
+
     return tvl_dict
+
+
 
 # Функция достает из CoinGecko все id нужных нам протоколов и убирает ненужные
 
@@ -223,6 +249,12 @@ def get_all_gecko_ids(list_of_tokens):
     cg_info = cg_info[cg_info['symbol'].isin(list_of_tokens)].reset_index(drop = True)
 
     cg_info = cg_info[(cg_info['symbol'] != 'ALPHA') | (cg_info['id'] == 'alpha-finance')]
+    cg_info = cg_info[(cg_info['symbol'] != 'ABC') | (cg_info['id'] == 'abc-pos-pool')]
+    cg_info = cg_info[(cg_info['symbol'] != 'ABR') | (cg_info['id'] == 'allbridge')]
+    cg_info = cg_info[(cg_info['symbol'] != 'ACS') | (cg_info['id'] == 'acryptos')]
+    cg_info = cg_info[(cg_info['symbol'] != 'APE') | (cg_info['id'] == 'apecoin')]
+    cg_info = cg_info[(cg_info['symbol'] != 'APE') | (cg_info['id'] == 'apecoin')]
+    cg_info = cg_info[(cg_info['symbol'] != 'APE') | (cg_info['id'] == 'apecoin')]
     cg_info = cg_info[(cg_info['symbol'] != 'APE') | (cg_info['id'] == 'apecoin')]
     cg_info = cg_info[(cg_info['symbol'] != 'APX') | (cg_info['id'] == 'apollox-2')]
     cg_info = cg_info[(cg_info['symbol'] != 'AURA') | (cg_info['id'] == 'aura-finance')]
@@ -268,6 +300,7 @@ def get_all_gecko_ids(list_of_tokens):
     return cg_info
 
 
+
 # Функция достает PMCV протокола по gecko_id
 
 def get_token_data_from_coingecko(gecko_id):
@@ -288,6 +321,7 @@ def get_token_data_from_coingecko(gecko_id):
     token_info_df.index = pd.to_datetime(token_info_df['timestamp'] / 1000, unit = 's')
     token_info_df = token_info_df.drop(['time1', 'time2', 'timestamp'], axis = 1)
     return token_info_df
+
 
 # Функция обрезает датафреймы из PMCV по введенным датам и заполняет пробелы в данных
 
@@ -316,6 +350,7 @@ def fill_dataframe_with_nans(dataframe, start_time, end_time):
     filled_dataframe = dataframe.sort_index()
     
     return filled_dataframe
+
 
 # Функция достает все данные из CoinGecko и сохраняет их в словарике
 
@@ -362,6 +397,7 @@ def download_full_gecko_data(gecko_info, start_date, end_date):
         
     return gecko_dict, missing_tokens_in_gecko
 
+
 # Функция, которая сортирует словарь по ключам
 def sort_dict_by_keys(dictionary):
     keys = list(dictionary.keys())
@@ -374,7 +410,6 @@ def dict_to_dataframe(dictionary):
     
     df_columns = ['date', 'symbol', 'gecko_id', 'llama_id', 'category', 'chain', 'address', 'price', 'market_cap', 'volume', 'TVL']
     long_df = pd.DataFrame(columns = df_columns)
-    chain_tokens = ['ETH', 'BNB', 'MATIC', 'AVAX', 'KAVA']
     
     for token_key in dictionary.keys():
         try:
@@ -410,12 +445,15 @@ def dict_to_dataframe(dictionary):
         
         long_df = long_df.reset_index(drop = True)
         
-    return long_df     
+    return long_df 
+
 
 # Главная функция
 
 def get_full_data(start_date, end_date):
     
+    chain_tokens = ['ETH', 'BNB', 'MATIC', 'AVAX']
+
     # Достаем TVL
     llama_data = get_all_llama_slugs()
     TVL_dict = get_available_TVL_from_DefiLlama(llama_data = llama_data, start_date = start_date, end_date = end_date)
@@ -464,6 +502,7 @@ def get_full_data(start_date, end_date):
         BIG_DICT[key_token]['volumes'] = PMCV_dict[symbol]['volumes']
         BIG_DICT[key_token]['TVL'] = TVL_dict[key_token]
         
+
     final_dict = sort_dict_by_keys(BIG_DICT)
     final_dataframe = dict_to_dataframe(final_dict)
     
@@ -479,11 +518,5 @@ def get_full_data(start_date, end_date):
     
     return final_dataframe
 
-
-
-
-"""
-# Usage example
-yesterday_date = (datetime.today() - timedelta(days = 1)).strftime('%Y-%m-%d')
-full_dataframe = get_full_data(start_date = '2021-08-31', end_date = yesterday_date)
-"""
+# yesterday_date = (datetime.today() - timedelta(days = 1)).strftime('%Y-%m-%d')
+# full_dataframe = get_full_data(start_date = '2021-08-31', end_date = yesterday_date)
