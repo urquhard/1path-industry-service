@@ -3,9 +3,9 @@ import numpy as np
 import math as m
 import statsmodels.api as sm  # 0.13.2!!!
 from tqdm import tqdm
+from .settings import settings
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
-from .settings import settings
 
 import warnings
 warnings.filterwarnings('ignore')

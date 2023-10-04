@@ -186,7 +186,11 @@ def get_available_TVL_from_DefiLlama(llama_data, start_date, end_date):
                 count_protocol = 0
         
         llama_tvl_endpoint = "https://api.llama.fi/protocol/"
-        request = requests.get(llama_tvl_endpoint + ID).json()
+        try:
+            request = requests.get(llama_tvl_endpoint + ID).json()
+        except:
+            print("Llama is down")
+            continue
         try:
             chain_list = list(request['chainTvls'].keys())
         except KeyError:

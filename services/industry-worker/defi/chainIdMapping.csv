@@ -1,0 +1,170 @@
+name,gecko_id,llama_id,new_id
+Acala,acala,acala,acala
+Achain,achain,,achain
+Alephium,,,
+Algorand,algorand,algorand,algorand
+Aptos,aptos,aptos,aptos
+Arbitrum Nova,arbitrum-nova,,arbitrum-nova
+Arbitrum,arbitrum-one,"['arbitrum', 'arbirtum']",arbitrum
+Ardor,ardor,,ardor
+Astar,astar,astar,astar
+Aura Network,aura-network,,aura-network
+Aurora,aurora,aurora,aurora
+Avalanche,avalanche,avax,avalanche
+BNB Beacon Chain,binancecoin,,binancecoin
+BNB Smart Chain,binance-smart-chain,"['bsc', 'bnb']",binance-smart-chain
+Base,base,base,base
+Bifrost Kusama,bifrost-kusama,,bifrost-kusama
+BitShares,bitshares,,bitshares
+BitTorrent,bittorrent,bittorrent,bittorrent
+Bitcichain,Bitcichain,,Bitcichain
+Bitgert Chain,bitgert,bitgert,bitgert
+Bitkub Chain,bitkub-chain,,bitkub-chain
+Boba Network,boba,boba,boba
+Callisto,callisto,callisto,callisto
+Canto,canto,canto,canto
+Cardano,cardano,cardano,cardano
+Celer Network,celer-network,,celer-network
+Celo,celo,celo,celo
+Chiliz,chiliz,,chiliz
+Clover,clover,,clover
+CoinEx Smart Chain,coinex-smart-chain,csc,coinex-smart-chain
+Conflux,conflux,conflux,conflux
+Core,core,"['core', 'CORE']",core
+Cosmos,cosmos,,cosmos
+Counterparty,counterparty,,counterparty
+Cronos,cronos,cronos,cronos
+Cube,cube,cube,cube
+DFK Chain,defi-kingdoms-blockchain,dfk,dfk-chain
+DeFiChain,defichain,,defichain
+Dogechain,dogechain,dogechain,dogechain
+EOS,eos,eos,eos
+EOS EVM,eos-evm,eos_evm,eos-evm
+Echelon,echelon,echelon,echelon
+Harmony,elastos,esc,elastos
+Elrond,elrond,elrond,elrond
+Empire,empire,empire,empire
+Enecuum,enq-enecuum,,enq-enecuum
+Energi,energi,,energi
+Ethereum,ethereum,"['eth', 'ethereum']",ethereum
+Ethereum Classic,ethereum-classic,ethereumclassic,ethereum-classic
+EthereumPoW,ethereumpow,ethpow,ethereumpow
+Everscale,everscale,everscale,everscale
+Evmos,evmos,evmos,evmos
+Exosama,exosama,,exosama
+Factom,factom,,factom
+Fantom,fantom,"['fantom', 'ftm']",fantom
+Findora,findora,findora,findora
+Flare Network,flare-network,,flare-network
+Function X,function-x,functionx,function-x
+Fuse,fuse,fuse,fuse
+Fusion Network,fusion-network,fusion,fusion-network
+Gnosis Chain,xdai,xdai,xdai
+GoChain,gochain,gochain,gochain
+Godwoken,godwoken,"['godwoken', 'godwoken_v1']",godwoken
+Harmony Shard 0,harmony-shard-0,harmony,harmony
+Hedera Hashgraph,hedera-hashgraph,hedera,hedera
+Hoo,hoo,hoo,hoo
+Hoo Smart Chain,hoo-smart-chain,,hoo-smart-chain
+Huobi ECO Chain Mainnet,huobi-token,,huobi-token
+Hydra,hydra,,hydra
+ICON,icon,icon,icon
+Injective,injective,,injective
+IoTeX,iotex,iotex,iotex
+Kadena,kadena,kadena,kadena
+KardiaChain,kardiachain,kardia,kardiachain
+Karura,karura,karura,karura
+Kava,kava,kava,kava
+Klaytn,klay-token,klaytn,klay-token
+Komodo,komodo,,komodo
+Kucoin,kucoin-community-chain,"['kucoin', 'kcc']",kucoin
+Kujira,kujira,kujira,kujira
+Kusama,kusama,kusama,kusama
+Libre,libre,,libre
+LightLink,lightlink,,lightlink
+Linea,linea,linea,linea
+Mantle,mantle,mantle,mantle
+Matrix,,,
+Mdex,mdex,,mdex
+Metaverse ETP,metaverse-etp,,metaverse-etp
+Meter,meter,meter,meter
+Metis Andromeda,metis-andromeda,metis,metis
+Milkomeda (Cardano),milkomeda-cardano,"['milkomeda', 'milkomeda_a1']",milkomeda
+Mixin Network,mixin-network,,mixin-network
+Moonbeam,moonbeam,moonbeam,moonbeam
+Moonriver,moonriver,moonriver,moonriver
+NEM,nem,,nem
+NEO,neo,neo,neo
+NXT,nxt,,nxt
+Near Protocol,near-protocol,near,near-protocol
+Neon EVM,neon-evm,,neon-evm
+Neutron,neutron,,neutron
+Nuls,nuls,,nuls
+OKExChain,okex-chain,"['okex', 'okexchain']",okex-chain
+ONUS,onus,onus,onus
+Oasis,oasis,"['oasis', 'emerald']",oasis
+Oasys,oasys,,oasys
+Omni,omni,,omni
+Ontology,ontology,,ontology
+OpenLedger,openledger,,openledger
+Optimism,optimistic-ethereum,optimism,optimism
+Ordinals,ordinals,,ordinals
+Osmosis,osmosis,osmosis,osmosis
+Picasso,,,
+Polis Chain,polis-chain,polis,polis-chain
+Polkadot,polkadot,,polkadot
+Polygon POS,polygon-pos,polygon,polygon
+Polygon zkEVM,polygon-zkevm,polygon_zkevm,polygon-zkevm
+Proof of Memes,proof-of-memes,,proof-of-memes
+Pulsechain,pulsechain,pulse,pulsechain
+Qtum,qtum,,qtum
+Radix,,,
+Redlight Chain,redlight-chain,,redlight-chain
+Rollux,rollux,,rollux
+Ronin,ronin,,ronin
+Rootstock RSK,rootstock,rsk,rootstock
+SX Network,sx-network,,sx-network
+Secret,secret,secret,secret
+Sei Network,sei-network,,sei-network
+Sero,super-zero,,super-zero
+ShibChain,ShibChain,,ShibChain
+Shibarium,shibarium,,shibarium
+Shiden Network,shiden network,shiden,shiden-network
+Simple Ledger Protocol (Bitcoin Cash),bitcoin-cash,,bitcoin-cash
+Skale,skale,skale,skale
+SmartBCH,smartbch,smartbch,smartbch
+Solana,solana,solana,solana
+Songbird,songbird,songbird,songbird
+Sora,sora,sora,sora
+Stacks,stacks,stacks,stacks
+Stellar,stellar,stellar,stellar
+Step Network,step-network,,step-network
+Stratis,stratis,,stratis
+Sui,sui,sui,sui
+Syscoin NEVM,syscoin,syscoin,syscoin
+TRON,tron,,tron
+Telos,telos,telos,telos
+Tenet,tenet,tenet,tenet
+Terra,terra-2,terra,terra
+Terra Classic,terra,,terra
+Tezos,tezos,tezos,tezos
+The Open Network,the-open-network,,the-open-network
+Theta,theta,theta,theta
+Thorchain,thorchain,thorchain,thorchain
+ThunderCore,thundercore,thundercore,thundercore
+Tombchain,tombchain,tombchain,tombchain
+TomoChain,tomochain,tomochain,tomochain
+Trustless Computer,trustless-computer,,trustless-computer
+Ultron,ultron,ultron,ultron
+VeChain,vechain,vechain,vechain
+Velas,velas,velas,velas
+Vite,vite,vite,vite
+Wanchain,wanchain,wan,wanchain
+Waves,waves,waves,waves
+Wemix Network,wemix-network,wemix,wemix-network
+XDC Network,xdc-network,xdc,xdc-network
+XRP Ledger,xrp,,xrp
+Yocoin,yocoin,,yocoin
+Zilliqa,zilliqa,,zilliqa
+opBNB,opbnb,,opbnb
+zkSync,zksync,era,zksync

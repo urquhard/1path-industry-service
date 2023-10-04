@@ -120,13 +120,13 @@ class Data(BaseSettings):
 
     @staticmethod
     def beta_preparation(DNV, returns, prices, mcap, quarantine_period = 45, 
-                         momentum_period = [7, 30], multiple_momentum = False):
+                         momentum_period = [7, 30], multiple_momentum = True):
     
         
         whitelisted_chains = ['Ethereum', 'Binance', 'Avalanche', 'Polygon']
 
         style_factors = ['factor_log_mc', 'factor_log_mc_tvl', 'VMR', 'factor_momentum', 'Mbeta']
-        whitelisted_categories = [ "Dexes", "Lending", "CDP", "Bridge", "Yield", "Liquid Staking", 
+        whitelisted_categories = ["Dexes", "Lending", "CDP", "Bridge", "Yield", "Liquid Staking", 
                                   "Yield Aggregator", "Derivatives", "Cross Chain"]
 
         # Calculate relative TVL exposures to modified categories
@@ -193,8 +193,8 @@ class Data(BaseSettings):
         log_mcap = np.log(mcap).melt(ignore_index = False).reset_index().\
         rename(columns={"value": "factor_log_mc", 'index': 'date'})
         log_tvl = np.log(DNV.groupby(["gecko_id", 'date']).agg({'TVL': lambda x: x.sum(min_count=1)}).reset_index().\
-                         pivot(index= 'date', columns = 'gecko_id', values = 'TVL').\
-                         ffill()).reset_index().melt(id_vars=['date']).rename(columns={"value": "log_tvl"})
+                 pivot(index= 'date', columns = 'gecko_id', values = 'TVL').\
+                 ffill()).reset_index().melt(id_vars=['date']).rename(columns={"value": "log_tvl"})
 
         # Quarantine flag (tvl and market cap should be not na X time ago)
 
