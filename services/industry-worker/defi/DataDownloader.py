@@ -377,8 +377,8 @@ def download_full_gecko_data(gecko_info, start_date, end_date):
         gecko_id = list_of_gecko_ids[i]
         token_name = list_of_tokens[i]
         try:
-            if (i % 14 == 0) and (i != 0):    # TIMEOUT
-                time.sleep(120)
+            # TIMEOUT
+            time.sleep(7)
             token_data = get_token_data_from_coingecko(gecko_id)
         except ValueError:
             print(token_name)
