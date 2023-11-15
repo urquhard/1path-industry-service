@@ -3,6 +3,9 @@ from sqlalchemy import create_engine
 import datetime
 import pandas as pd
 from ast import literal_eval
+from web3 import Web3
+from web3.middleware import geth_poa_middleware
+import json
 
 from defi.DataDownloader import get_full_data
 from settings.env import env
@@ -45,6 +48,21 @@ def update_weights():
     res.append(geckoId_to_symbol.to_sql("geckoId_to_symbol-1", engine, if_exists='replace', chunksize=100, method="multi"))
     res.append(ret_copy.to_sql("ret_copy-1", engine, if_exists='replace', chunksize=100, method="multi"))
 
+def update_shares():
+    web3 = Web3(Web3.HTTPProvider(f"{env.bsc_http_provider_url}"))
+    web3.middleware_onion.inject(geth_poa_middleware, layer=0)
+    with open("VaultV1.json") as f:
+        VaultABI = json.load(f)
+    Vault = web3.eth.contract(address="0xbe9080Fe628F073633DC2dcFA9d3CC0cc38D4805", abi=VaultABI["abi"])
+    sh_frame = pd.DataFrame(index = [], columns = ['1 share dollar value'])
+    try:
+        sh_frame.loc[pd.to_datetime(datetime.now()).strftime('%Y-%m-%d %H-%M-%S')] = \
+        round(Vault.functions.exchangeRate().call() / 10 ** 18, 3)
+    except:
+        sh_frame.loc[pd.to_datetime(datetime.now()).strftime('%Y-%m-%d %H-%M-%S')] = \
+        round(Vault.functions.exchangeRate().call() / 10 ** 18, 3)
+    sh_frame.to_sql("share_perf_frame", engine, if_exists='append')
+        
 # add timedelta depending on env.delay
 # add index validation
 # TODO add try except validation for each action
@@ -79,6 +97,22 @@ async def update_weights_scheduler() -> None:
         
         await asyncio.sleep(env.finance_data_delay)
 
+async def update_shares_scheduler() -> None:
+    """
+    Used for scheduling updates of shares in postgres
+    Time for update is located in .env file
+
+    Returns
+    -------
+    None.
+
+    """
+    while True:
+        update_shares()
+        
+        await asyncio.sleep(env.shares_data_delay)
+        
+
 async def main():
     """
     Main asyncio function. Initializes TVL and sets it into postgres,
@@ -94,7 +128,8 @@ async def main():
     while True:
         await asyncio.gather(
             update_data_scheduler(),
-            update_weights_scheduler()
+            update_weights_scheduler(),
+            update_shares_scheduler()
         )
 
 if __name__ == "__main__":
