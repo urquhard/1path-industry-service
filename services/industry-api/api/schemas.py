@@ -19,7 +19,8 @@ class RowScheme(BaseModel):
     market_cap: Optional[float]
     volume: Optional[float]
     TVL: Optional[float]
-    
+    id_collection: Optional[str]
+    update_date: Optional[str]
     class Config:
         orm_mode = True
 
