@@ -26,17 +26,19 @@ def get_model_data_by_date(db: Session, table, start_date: str, end_date: str):
     return db.query(table).all()
 
 @model_router.get("/returns")
-def get_returns(db: Session = Depends(get_db_session)):
+def get_returns(db: Session = Depends(get_db_session), start_date="2022-01-01"):
     target_weights_dict = {
                                   'uniswap': 0.530646,
                                   'pancakeswap-token': 0.418644,
                                   'woo-network': 0.050710
                              }
-    performance_frame = pd.DataFrame(0.0, index = [(pd.to_datetime('2023-11-01') - timedelta(days = 1)).strftime('%Y-%m-%d')],
+    performance_frame = pd.DataFrame(0.0, index = [(pd.to_datetime(start_date) - timedelta(days = 1)).strftime('%Y-%m-%d')],
                                         columns = list(target_weights_dict.keys()))
     table = Returns
-    returns_frame = pd.DataFrame(db.query(table).filter(table.index >= "2023-11-01").all())
-    for day in returns_frame.loc['2023-11-01':].index:
+    query = db.query(table).filter(table.index >= start_date)
+    returns_frame = pd.read_sql(query.statement, query.session.bind)
+    returns_frame.set_index("index", inplace=True)
+    for day in returns_frame.loc[start_date:].index:
         for token in performance_frame.columns:
             performance_frame.loc[day, token] = returns_frame.loc[day][token] * target_weights_dict[token]
 
