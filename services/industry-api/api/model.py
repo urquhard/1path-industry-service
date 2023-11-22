@@ -23,6 +23,65 @@ def get_model_data_by_date(db: Session, table, start_date: str, end_date: str):
 
     return db.query(table).all()
 
+@model_router.get("/weights")
+def get_weights():
+    tokens_dict = {'UNI': '0xBf5140A22578168FD562DCcF235E5D43A02ce9B1',
+     'CAKE': '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+     'WOO': '0x4691937a7508860F876c9c0a2a617E7d9E945D4B'}
+    
+    from web3 import Web3
+    
+    minABI = [
+                        {
+                            "constant": True,
+                            "inputs": [{'name': "_owner", 'type': "address"}],
+                            "name": "balanceOf",
+                            "outputs": [{'name': "balance", 'type': "uint256"}],
+                            "type": "function",
+                        },
+                        {
+                            "constant": True,
+                             "inputs":[],
+                             "name":"decimals",
+                             "outputs":[{"name":"","type":"uint8"}],
+                             "payable": False,
+                             "stateMutability":"view",
+                             "type":"function"
+                        }
+                    ]
+    
+    web3 = Web3(Web3.HTTPProvider("https://bsc-mainnet.nodereal.io/v1/58416516ddbb492a8a9acd27ee7c09cd"))
+    
+    from pycoingecko import CoinGeckoAPI
+    cg = CoinGeckoAPI()
+    suka = cg.get_price(ids=['pancakeswap-token', 'uniswap', 'woo-network'], vs_currencies = 'usd')
+    
+    quotes = {"CAKE": suka["pancakeswap-token"]["usd"], "UNI": suka["uniswap"]["usd"], "WOO": suka["woo-network"]["usd"]}
+    
+    dollar_value_to_token = {}
+    for token in tokens_dict.keys():
+        try:
+            contract = web3.eth.contract(address=tokens_dict[token], abi=minABI)
+            token_balance = contract.functions.balanceOf('0x2b50BCd2A3f3568dCad84Efbc38f908e49a6F463').call()
+            dec = contract.functions.decimals().call()
+            dollar_value_to_token[token] = token_balance / 10 ** dec * quotes[token]
+        except Exception as e:
+            print(e)
+            try:
+                contract = web3.eth.contract(address=tokens_dict[token], abi=minABI)
+                token_balance = contract.functions.balanceOf('0x2b50BCd2A3f3568dCad84Efbc38f908e49a6F463').call()
+                dec = contract.functions.decimals().call()
+                dollar_value_to_token[token] = token_balance / 10 ** dec * quotes[token]
+            except:
+                pass
+    s = 0
+    for val in dollar_value_to_token.values():
+        s += val
+        
+    for key, val in dollar_value_to_token.items():
+        dollar_value_to_token[key] /= s
+    
+    return dollar_value_to_token
 
 @model_router.get("/{table_name}")
 def api_data(table_name: str, start_date: str = "None",
