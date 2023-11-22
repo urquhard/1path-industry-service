@@ -155,7 +155,7 @@ class Shares(Base):
     share_dollar_value = Column("1 share dollar value", Float)
     
 class Returns(Base):
-    __tablename__ = "ret_copy"
+    __tablename__ = "ret_copy-1"
 
     index = Column("index", DateTime, primary_key=True)
     pancakeswap_token = Column("pancakeswap-token", Float)
