@@ -147,3 +147,17 @@ class XDict(Base):
     other_chains = Column("other_chains", Float)
     other_categories = Column("other_categories", Float)
     index = Column("date", DateTime)
+
+class Shares(Base):
+    __tablename__ = "share_perf_frame"
+
+    index = Column("index", DateTime, primary_key=True)
+    share_dollar_value = Column("1 share dollar value", Float)
+    
+class Returns(Base):
+    __tablename__ = "ret_copy"
+
+    index = Column("index", DateTime, primary_key=True)
+    pancakeswap_token = Column("pancakeswap-token", Float)
+    uniswap = Column("uniswap", Float)
+    woo_network = Column("woo-network", Float)

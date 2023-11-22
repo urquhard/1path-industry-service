@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from database import get_db_session
-from models import IndustryReturns, PValueData, ResTest, SE, VifValues, XDict
+from models import IndustryReturns, PValueData, ResTest, SE, VifValues, XDict, Shares, Returns
 
 
 model_router = APIRouter()
@@ -39,6 +39,10 @@ def api_data(table_name: str, start_date: str = "None",
         table = VifValues
     elif table_name == "XDict":
         table = XDict
+    elif table_name == "Shares":
+        table = Shares
+    elif table_name == "Returns":
+        table = Returns
     else: 
         raise HTTPException(status_code=404, detail="Table not found")
     data = get_model_data_by_date(db, table, start_date, end_date)
