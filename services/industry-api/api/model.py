@@ -1,6 +1,8 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+import pandas as pd
+from datetime import timedelta
 
 from database import get_db_session
 from models import IndustryReturns, PValueData, ResTest, SE, VifValues, XDict, Shares, Returns
@@ -22,6 +24,25 @@ def get_model_data_by_date(db: Session, table, start_date: str, end_date: str):
         return db.query(table).filter(*filters).all()
 
     return db.query(table).all()
+
+@model_router.get("/returns")
+def get_returns(db: Session = Depends(get_db_session)):
+    target_weights_dict = {
+                                  'uniswap': 0.530646,
+                                  'pancakeswap-token': 0.418644,
+                                  'woo-network': 0.050710
+                             }
+    performance_frame = pd.DataFrame(0.0, index = [(pd.to_datetime('2023-11-01') - timedelta(days = 1)).strftime('%Y-%m-%d')],
+                                        columns = list(target_weights_dict.keys()))
+    table = Returns
+    returns_frame = pd.DataFrame(db.query(table).filter(table.index >= "2023-11-01").all())
+    for day in returns_frame.loc['2023-11-01':].index:
+        for token in performance_frame.columns:
+            performance_frame.loc[day, token] = returns_frame.loc[day][token] * target_weights_dict[token]
+
+    per_to_plot = pd.DataFrame(index = list(performance_frame.index)[1:], columns = ['performance'])
+    per_to_plot['performance'] = list(performance_frame.sum(axis=1).add(1).cumprod().shift(1).iloc[1:])
+    return per_to_plot
 
 @model_router.get("/weights")
 def get_weights():
