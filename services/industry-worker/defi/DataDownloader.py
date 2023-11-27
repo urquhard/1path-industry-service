@@ -8,9 +8,8 @@ from datetime import datetime
 from ast import literal_eval
 import time
 import copy
-from data import data
 
-
+from .data import data
 from .addGeckoData import addGeckoData
 
 import warnings
