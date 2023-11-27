@@ -8,6 +8,8 @@ from datetime import datetime
 from ast import literal_eval
 import time
 import copy
+from data import data
+
 
 from .addGeckoData import addGeckoData
 
@@ -176,7 +178,7 @@ def updateLlamaDataFrame(oldLlamaDF, chain_data, addresses_dict, update_file = F
         print('Done!\n')
         copy_addresses_dict = copy.deepcopy(addresses_dict)
         updatedAddressesDF = pd.DataFrame([copy_addresses_dict.keys(), copy_addresses_dict.values()], index = [None, 'addresses']).transpose().set_index(None).sort_index()
-        updatedAddressesDF.to_csv('tokenAddresses.csv')
+        updatedAddressesDF.to_csv('defi/tokenAddresses.csv')
 
     # Update token addresses
     badAddressTokens = fill_token_addresses(badTokens = badAddressTokens, tokenAddresses_dict = addresses_dict, chain_data = chain_data) 
@@ -186,7 +188,7 @@ def updateLlamaDataFrame(oldLlamaDF, chain_data, addresses_dict, update_file = F
     newLlamaDF = pd.concat([updatedTokenData, oldLlamaDF]).sort_values('symbol').reset_index(drop = True)
     
     if update_file == True:
-        newLlamaDF.to_csv('DefiLlamaData.csv', index = 0)
+        newLlamaDF.to_csv('defi/DefiLlamaData.csv', index = 0)
 
     return newLlamaDF
 
@@ -347,20 +349,20 @@ def all_together(oldLlamaDF, chain_data, addresses_dict, start_date, end_date, u
 
 startDate = '2021-08-31'
 endDate = (datetime.today() - timedelta(days = 1)).strftime('%Y-%m-%d')
-oldLlamaData = pd.read_csv("DefiLlamaData.csv")
-chainData = pd.read_csv("chainIdMapping.csv")
-tokenAddressesDF = pd.read_csv('tokenAddresses.csv', index_col = 0, converters = {'addresses': literal_eval})
+oldLlamaData = pd.read_csv("defi/DefiLlamaData.csv")
+chainData = pd.read_csv("defi/chainIdMapping.csv")
+tokenAddressesDF = pd.read_csv('defi/tokenAddresses.csv', index_col = 0, converters = {'addresses': literal_eval})
 tokenAddressesDict = dict(zip(tokenAddressesDF.index, tokenAddressesDF['addresses']))
 
 full_dataframe = all_together(oldLlamaDF = oldLlamaData, chain_data = chainData, addresses_dict = tokenAddressesDict, start_date = startDate, end_date = endDate)
 
-full_dataframe.to_csv('NASRAL.csv', index = False)
+full_dataframe.to_csv('defi/NASRAL.csv', index = False)
 
 
 
 ### JSON, который нужен для телеги
 
-DNV = pd.read_csv('NASRAL.csv')
+DNV = pd.read_csv('defi/NASRAL.csv')
 DNV = data.data_preparation(DNV)
 
 def get_telegram_dictionary(bigData, tokenAddresses):
@@ -392,5 +394,5 @@ def get_telegram_dictionary(bigData, tokenAddresses):
     return teleDict
 
 TeleDict = get_telegram_dictionary(bigData = DNV, tokenAddresses = tokenAddressesDict)
-with open('TeleDict.json', 'w') as f:
+with open('defi/TeleDict.json', 'w') as f:
     json.dump(TeleDict, f)
