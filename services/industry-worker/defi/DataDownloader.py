@@ -9,7 +9,7 @@ from ast import literal_eval
 import time
 import copy
 
-from addGeckoData import addGeckoData
+from .addGeckoData import addGeckoData
 
 import warnings
 warnings.filterwarnings('ignore')
