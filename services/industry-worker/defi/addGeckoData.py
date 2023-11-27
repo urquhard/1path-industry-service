@@ -6,6 +6,7 @@ def addGeckoData(llama_data):
     no_gecko = llama_data[llama_data['gecko_id'].isna() == True]
     yes_gecko = llama_data[llama_data['gecko_id'].isna() == False]
         
+    # Token is not available in DefiLlama
     yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'apollo-dao'] = None
     yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'usdm'] = None
     yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'sithswap'] = None
@@ -86,7 +87,6 @@ def addGeckoData(llama_data):
     yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'yuzuswap'] = None
     yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'zkswap'] = None
     yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'growth-defi'] = None
-
     yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'ape-finance'] = None
     yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'cache-gold'] = None
     yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'dot-dot-finance'] = None
@@ -95,17 +95,13 @@ def addGeckoData(llama_data):
     yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'ideamarket'] = None
     yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'lend-flare-dao-token'] = None
     yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'revault-network'] = None
-    yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'moonswap'] = None
+    yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'b-watch-box'] = None
+    yes_gecko['gecko_id'][yes_gecko['gecko_id'] == 'bastion-protocol'] = None
 
-
-    yes_gecko['address'][yes_gecko['gecko_id'] == 'xy-finance'] = '0x77777777772cf0455fb38ee0e75f38034dfa50de'
-    no_gecko['symbol'][no_gecko['symbol'] == 'Base'] = 'BASE'
-    no_gecko['symbol'][no_gecko['symbol'] == 'PUZZLESWAP'] = 'PUZZLE'
-    no_gecko['symbol'][no_gecko['symbol'] == 'safETH'] = 'SAFETH'
-
+    # Add gecko_IDs manually
     no_gecko['gecko_id'][no_gecko['symbol'] == 'AAVE'] = 'aave'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'ABC'] = 'abc-pos-pool'
-    no_gecko['gecko_id'][no_gecko['symbol'] == 'ACA'] = 'acala'               # CHAIN
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'ACA'] = 'acala'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'AGI'] = 'auragi'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'ALPACA'] = 'alpaca-finance'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'AQUA'] = 'planet-finance'
@@ -115,7 +111,7 @@ def addGeckoData(llama_data):
     no_gecko['gecko_id'][no_gecko['symbol'] == 'BANANA'] = 'apeswap-finance'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'BEND'] = 'benddao'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'BLUR'] = 'blur'
-    no_gecko['gecko_id'][no_gecko['symbol'] == 'BNB'] = 'binancecoin'         # CHAIN
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'BNB'] = 'binancecoin'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'BNC'] = 'bifrost-native-coin'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'BNT'] = 'bancor'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'BOW'] = 'archerswap-bow'
@@ -127,7 +123,7 @@ def addGeckoData(llama_data):
     no_gecko['gecko_id'][no_gecko['symbol'] == 'CRV'] = 'curve-dao-token'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'DCHF'] = 'defi-franc'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'DFI'] = 'defichain'
-    no_gecko['gecko_id'][no_gecko['symbol'] == 'EMPIRE'] = 'empire-network'   # CHAIN
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'EMPIRE'] = 'empire-network'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'FLDX'] = 'flair-dex'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'FLOW'] = 'velocimeter-flow'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'FOREX'] = 'handle-fi'
@@ -196,8 +192,6 @@ def addGeckoData(llama_data):
     no_gecko['gecko_id'][no_gecko['symbol'] == 'csMatic'] = 'claystack-staked-matic'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'frxETH'] = 'frax-ether'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'kDAO'] = 'kolibri-dao'
-
-    # NEW TOKENS
     no_gecko['gecko_id'][no_gecko['symbol'] == 'ARBS'] = 'arbswap'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'EQ'] = 'equilibrium-token'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'GGP'] = 'gogopool'
@@ -219,8 +213,6 @@ def addGeckoData(llama_data):
     no_gecko['gecko_id'][no_gecko['symbol'] == 'UNFI'] = 'unifi-protocol-dao'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'VYFI'] = 'vyfinance'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'XWIN'] = 'xwin-finance'
-
-    # EXTRA TOKENS
     no_gecko['gecko_id'][no_gecko['symbol'] == 'ALPHA'] = 'alpha-finance'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'BSW'] = 'biswap'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'CHESS'] = 'tranchess'
@@ -264,7 +256,6 @@ def addGeckoData(llama_data):
     no_gecko['gecko_id'][no_gecko['slug'] == 'meta-pool-near'] = 'meta-pool'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'MYC'] = 'mycelium'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'NUON'] = 'nuon'
-    no_gecko['gecko_id'][no_gecko['symbol'] == 'ON'] = 'aegis-token-f7934368-2fb3-4091-9edc-39283e87f55d'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'ORACLE'] = 'oracleswap'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'PARA'] = 'parallel-finance'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'PIKO'] = 'pinnako'
@@ -285,6 +276,27 @@ def addGeckoData(llama_data):
     no_gecko['gecko_id'][no_gecko['symbol'] == 'XVS'] = 'venus'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'ZLK'] = 'zenlink-network-token'
     no_gecko['gecko_id'][no_gecko['symbol'] == 'SAFETH'] = 'simple-asymmetry-eth'
+    no_gecko['gecko_id'][no_gecko['symbol'] == '9INCH'] = '9inch'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'HUM'] = 'hummus'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'KNIGHT'] = 'knightswap'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'LFNTY'] = 'lifinity'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'MKR'] = 'maker'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'MNDE'] = 'marinade'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'MNT'] = 'mantle'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'NOTE'] = 'notional-finance'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'PNP'] = 'penpie'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'POOL'] = 'pooltogether'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'PREMIA'] = 'premia'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'TNGBL'] = 'tangible'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'USDM'] = 'mountain-protocol-usdm'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'VVS'] = 'vvs-finance'
+    no_gecko['gecko_id'][no_gecko['symbol'] == 'XEN'] = 'xena-finance'
+
+    # Exceptions in DefiLlama Data 
+    yes_gecko['address'][yes_gecko['gecko_id'] == 'xy-finance'] = '0x77777777772cf0455fb38ee0e75f38034dfa50de'
+    no_gecko['symbol'][no_gecko['symbol'] == 'Base'] = 'BASE'
+    no_gecko['symbol'][no_gecko['symbol'] == 'PUZZLESWAP'] = 'PUZZLE'
+    no_gecko['symbol'][no_gecko['symbol'] == 'safETH'] = 'SAFETH'
 
     no_gecko['id_collection'] = np.where(no_gecko['gecko_id'].isna(), 'None', 'Manually')
     yes_gecko['id_collection'] = np.where(yes_gecko['gecko_id'].isna(), 'Manually', 'Automatically')

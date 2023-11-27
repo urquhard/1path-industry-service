@@ -5,14 +5,16 @@ Alephium,,,
 Algorand,algorand,algorand,algorand
 Aptos,aptos,aptos,aptos
 Arbitrum Nova,arbitrum-nova,,arbitrum-nova
-Arbitrum,arbitrum-one,"['arbitrum', 'arbirtum']",arbitrum
+Arbitrum,arbitrum-one,arbitrum,arbitrum
+Arbitrum,arbitrum-one,arbirtum,arbitrum
 Ardor,ardor,,ardor
 Astar,astar,astar,astar
 Aura Network,aura-network,,aura-network
 Aurora,aurora,aurora,aurora
 Avalanche,avalanche,avax,avalanche
 BNB Beacon Chain,binancecoin,,binancecoin
-BNB Smart Chain,binance-smart-chain,"['bsc', 'bnb']",binance-smart-chain
+BNB Smart Chain,binance-smart-chain,bsc,binance-smart-chain
+BNB Smart Chain,binance-smart-chain,bnb,binance-smart-chain
 Base,base,base,base
 Bifrost Kusama,bifrost-kusama,,bifrost-kusama
 BitShares,bitshares,,bitshares
@@ -30,7 +32,8 @@ Chiliz,chiliz,,chiliz
 Clover,clover,,clover
 CoinEx Smart Chain,coinex-smart-chain,csc,coinex-smart-chain
 Conflux,conflux,conflux,conflux
-Core,core,"['core', 'CORE']",core
+Core,core,core,core
+Core,core,CORE,core
 Cosmos,cosmos,,cosmos
 Counterparty,counterparty,,counterparty
 Cronos,cronos,cronos,cronos
@@ -46,14 +49,16 @@ Elrond,elrond,elrond,elrond
 Empire,empire,empire,empire
 Enecuum,enq-enecuum,,enq-enecuum
 Energi,energi,,energi
-Ethereum,ethereum,"['eth', 'ethereum']",ethereum
+Ethereum,ethereum,eth,ethereum
+Ethereum,ethereum,ethereum,ethereum
 Ethereum Classic,ethereum-classic,ethereumclassic,ethereum-classic
 EthereumPoW,ethereumpow,ethpow,ethereumpow
 Everscale,everscale,everscale,everscale
 Evmos,evmos,evmos,evmos
 Exosama,exosama,,exosama
 Factom,factom,,factom
-Fantom,fantom,"['fantom', 'ftm']",fantom
+Fantom,fantom,fantom,fantom
+Fantom,fantom,ftm,fantom
 Findora,findora,findora,findora
 Flare Network,flare-network,,flare-network
 Function X,function-x,functionx,function-x
@@ -61,7 +66,8 @@ Fuse,fuse,fuse,fuse
 Fusion Network,fusion-network,fusion,fusion-network
 Gnosis Chain,xdai,xdai,xdai
 GoChain,gochain,gochain,gochain
-Godwoken,godwoken,"['godwoken', 'godwoken_v1']",godwoken
+Godwoken,godwoken,godwoken,godwoken
+Godwoken,godwoken,godwoken_v1,godwoken
 Harmony Shard 0,harmony-shard-0,harmony,harmony
 Hedera Hashgraph,hedera-hashgraph,hedera,hedera
 Hoo,hoo,hoo,hoo
@@ -77,7 +83,8 @@ Karura,karura,karura,karura
 Kava,kava,kava,kava
 Klaytn,klay-token,klaytn,klay-token
 Komodo,komodo,,komodo
-Kucoin,kucoin-community-chain,"['kucoin', 'kcc']",kucoin
+Kucoin,kucoin-community-chain,kucoin,kucoin
+Kucoin,kucoin-community-chain,kcc,kucoin
 Kujira,kujira,kujira,kujira
 Kusama,kusama,kusama,kusama
 Libre,libre,,libre
@@ -89,7 +96,8 @@ Mdex,mdex,,mdex
 Metaverse ETP,metaverse-etp,,metaverse-etp
 Meter,meter,meter,meter
 Metis Andromeda,metis-andromeda,metis,metis
-Milkomeda (Cardano),milkomeda-cardano,"['milkomeda', 'milkomeda_a1']",milkomeda
+Milkomeda (Cardano),milkomeda-cardano,milkomeda,milkomeda
+Milkomeda (Cardano),milkomeda-cardano,milkomeda_a1,milkomeda
 Mixin Network,mixin-network,,mixin-network
 Moonbeam,moonbeam,moonbeam,moonbeam
 Moonriver,moonriver,moonriver,moonriver
@@ -100,9 +108,11 @@ Near Protocol,near-protocol,near,near-protocol
 Neon EVM,neon-evm,,neon-evm
 Neutron,neutron,,neutron
 Nuls,nuls,,nuls
-OKExChain,okex-chain,"['okex', 'okexchain']",okex-chain
+OKExChain,okex-chain,okex,okex-chain
+OKExChain,okex-chain,okexchain,okex-chain
 ONUS,onus,onus,onus
-Oasis,oasis,"['oasis', 'emerald']",oasis
+Oasis,oasis,oasis,oasis
+Oasis,oasis,emerald,oasis
 Oasys,oasys,,oasys
 Omni,omni,,omni
 Ontology,ontology,,ontology

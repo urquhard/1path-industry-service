@@ -81,14 +81,14 @@ Bancor V3,ethereum:0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c,BNT,Ethereum,banco
 ShibaSwap,ethereum:0x9813037ee2218799597d83d4a5b6f3b6778218d9,BONE,Ethereum,shibaswap,bone-shibaswap,Dexes,21481105.217792783,Automatically,2023-09-09
 SpookySwap,fantom:0x841fad6eae12c286d1fd18d1d525dffa75c7effe,BOO,Fantom,spookyswap,spookyswap,Dexes,14890184.733409522,Automatically,2023-09-09
 BoringDAO,ethereum:0xbc19712feb3a26080ebf6f2f7849b417fdd792ca,BORING,Multi-Chain,boringdao,boringdao,Cross Chain,2479261.630373852,Automatically,2023-09-09
-Bwatch,ethereum:0x045414e728067ab3da4bceafc0d992d59183463a,BOX,Mixin,bwatch,b-watch-box,Indexes,257523779.59,Automatically,2023-09-09
+Bwatch,ethereum:0x045414e728067ab3da4bceafc0d992d59183463a,BOX,Mixin,bwatch,,Indexes,257523779.59,None,2023-09-09
 DefiBox,binance-smart-chain:0x708c0e1d2417603d9acb0ae04fefbb93a7a322ff,BOX,Multi-Chain,defibox,defibox,Dexes,17553386.286210492,Automatically,2023-09-09
 B.Protocol,ethereum:0xbbBBBBB5AA847A2003fbC6b5C16DF0Bd1E725f61,BPRO,Multi-Chain,b.protocol,b-protocol,Lending,27402066.91798379,Automatically,2023-09-09
 Octus Bridge,everscale:0:f2679d80b682974e065e03bf42bbee285ce7c587eb153b41d761ebfd954c45e1,BRIDGE,Multi-Chain,octus-bridge,octus-bridge,Bridge,27522221.34208595,Automatically,2023-09-09
 CrossChain Bridge,0x92868a5255c628da08f550a858a802f5351c5223,BRIDGE,Multi-Chain,crosschain-bridge,,Cross Chain,2955827.5738303573,Manually,2023-09-09
 Burrow,near-protocol:token.burrow.near,BRRR,Near,burrow,burrow,Lending,13247263.12264073,Automatically,2023-09-09
 Stakehouse,ethereum:0x534D1F5E617e0f72A6b06a04Aa599839AF776A5e,BSN,Ethereum,stakehouse,blockswap-network-2,Liquid Staking,1998198.0963567956,Automatically,2023-09-09
-Bastion,aurora:0x9f1F933C660a1DC856F0E0Fe058435879c5CCEf0,BSTN,Aurora,bastion,bastion-protocol,Lending,1622360.6215351569,Automatically,2023-09-09
+Bastion,aurora:0x9f1F933C660a1DC856F0E0Fe058435879c5CCEf0,BSTN,Aurora,bastion,,Lending,1622360.6215351569,None,2023-09-09
 BiSwap V2,binance-smart-chain:0x965f527d9159dce6288a2219db51fc6eef120dd1,BSW,Binance,biswap-v2,biswap,Dexes,64255997.87299033,Manually,2023-09-09
 BiSwap V3,binance-smart-chain:0x965f527d9159dce6288a2219db51fc6eef120dd1,BSW,Binance,biswap-v3,biswap,Dexes,5397485.356607921,Manually,2023-09-09
 BSCSwap,bsc:0xacc234978a5eb941665fd051ca48765610d82584,BSWAP,Binance,bscswap,,Dexes,1658568.8057596933,None,2023-09-09
@@ -280,7 +280,6 @@ LiNEAR Protocol,near-protocol:0x918dbe087040a41b786f0da83190c293dae24749,LINEAR,
 Liquis,ethereum:0xD82fd4D6D62f89A1E50b1db69AD19932314aa408,LIQ,Ethereum,liquis,liquis,Yield,1882314.1393051576,Automatically,2023-09-09
 Liquid Finance,arbitrum:0x93c15cd7de26f07265f0272e0b831c5d7fab174f,LIQD,Arbitrum,liquid-finance,liquid-finance,Yield,1210010.503482597,Automatically,2023-09-09
 Bunni,ethereum:0xfd0205066521550d7d7ab19da8f72bb004b4c341,LIT,Multi-Chain,bunni,timeless,Liquidity manager,8714634.78121173,Manually,2023-09-09
-Proton Loan,proton:LOAN-proton-loan.token,LOAN,Proton,proton-loan,proton-loan,Lending,3016234.865133021,Automatically,2023-09-09
 Lodestar V1,arbitrum:0xF19547f9ED24aA66b03c3a552D181Ae334FBb8DB,LODE,Arbitrum,lodestar-v1,lodestar,Lending,6164860.744375211,Manually,2023-09-09
 Tokenlon,ethereum:0x0000000000095413afc295d19edeb1ad7b71c952,LON,Ethereum,tokenlon,tokenlon,Dexes,1537103.886512008,Automatically,2023-09-09
 Liqwid,cardano:8e420ce194ca84040ba6971e6ab816e3d76ee9ee,LQ,Cardano,liqwid,liqwid-finance,Lending,17690334.507432584,Automatically,2023-09-09
@@ -314,6 +313,7 @@ Moonwell Apollo,moonriver:0xbb8d88bcd9749636bc4d2be22aac4bb3b01a58f1,MFAM,Moonri
 MugenFinance,arbitrum:0xfc77b86f3ade71793e1eec1e7944db074922856e,MGN,Arbitrum,mugenfinance,mugen-finance,Yield Aggregator,3353271.0488296,Automatically,2023-09-09
 Magpie,binance-smart-chain:0xD06716E1Ff2E492Cc5034c2E81805562dd3b45fa,MGP,Multi-Chain,magpie,magpie,Yield,6358572.55863449,Automatically,2023-09-09
 MuesliSwap,cardano:8a1cfae21368b8bebbbed9800fec304e95cce39a2a57dc35e2e3ebaa.MILK,MILK,Multi-Chain,muesliswap,muesliswap-milk,Dexes,4501853.223948834,Automatically,2023-09-09
+Mimo Protocol,ethereum:0x90b831fa3bebf58e9744a14d638e25b4ee06f9bc,MIMO,Multi-Chain,parallel-protocol,mimo-parallel-governance-token,CDP,17857612.49867714,Automatically,2023-09-09
 Minswap,cardano:asset1d9v7aptfvpx7we2la8f25kwprkj2ma5rp6uwzv,MIN,Cardano,minswap,minswap,Dexes,38033656.082230754,Automatically,2023-09-09
 Alchemist,ethereum:0x88acdd2a6425c3faae4bc9650fd7e27e0bebb7ab,MIST,Ethereum,alchemist,alchemist,Yield,1141077.0175014846,Automatically,2023-09-09
 MakerDAO,ethereum:0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2,MKR,Ethereum,makerdao,maker,CDP,4962627406.294063,Automatically,2023-09-09
@@ -456,7 +456,6 @@ Synthetix,ethereum:0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f,SNX,Multi-Chain,sy
 Socean,solana:5oVNBeEEQvYi1cX3ir8Dx5n1P7pdxydbGF2X4TxVusJm,SOCN,Solana,socean,,Liquid Staking,1197785.6524355274,None,2023-09-09
 Solarbeam,moonriver:0x6bD193Ee6D2104F14F94E2cA6efefae561A4334B,SOLAR,Moonriver,solarbeam,solarbeam,Dexes,1568128.52096673,Automatically,2023-09-09
 Solidly V3,0x777172D858dC1599914a1C4c6c9fC48c99a60990,SOLID,Ethereum,solidly-v3,,Dexes,2601502.529707897,None,2023-09-09
-Solv Protocol V2,0x256f2d67e52fe834726d2ddcd8413654f5eb8b53,SOLV,Multi-Chain,solv-protocol-v2,,RWA,2932819.153628364,None,2023-09-09
 Sommelier,ethereum:0xa670d7237398238de01267472c6f13e5b8010fd1,SOMM,Ethereum,sommelier,sommelier,Yield Aggregator,32691220.932343733,Automatically,2023-09-09
 Sonne Finance,optimism:0x1db2466d9f5e10d7090e7152b68d62703a2245f0,SONNE,Multi-Chain,sonne-finance,sonne-finance,Lending,37680475.32362271,Automatically,2023-09-09
 Sovryn Zero,rootstock:0xEfC78FC7D48B64958315949279bA181C2114abbD,SOV,RSK,sovryn-zero,sovryn,CDP,18429189.33315976,Manually,2023-09-09
