@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 import pandas as pd
 from datetime import timedelta
+import json
 
 from database import get_db_session
 from models import IndustryReturns, PValueData, ResTest, SE, VifValues, XDict, Shares, Returns
@@ -105,6 +106,23 @@ def get_weights():
         dollar_value_to_token[key] /= s
     
     return dollar_value_to_token
+
+@model_router.get("/shares_count")
+def get_shares_count():
+    tokens_dict = {'UNI': '0xBf5140A22578168FD562DCcF235E5D43A02ce9B1',
+     'CAKE': '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+     'WOO': '0x4691937a7508860F876c9c0a2a617E7d9E945D4B'}
+    
+    from web3 import Web3
+    
+    with open("VaultV1.json") as f:
+        vault_abi = json.load(f)
+    web3 = Web3(Web3.HTTPProvider("https://bsc-mainnet.nodereal.io/v1/58416516ddbb492a8a9acd27ee7c09cd"))
+    Vault = web3.eth.contract(address="0xbe9080Fe628F073633DC2dcFA9d3CC0cc38D4805", abi=vault_abi["abi"])
+    total_share_supply = round(Vault.functions.totalSupply().call() / 10**18, 3)
+    
+    
+    return total_share_supply
 
 @model_router.get("/{table_name}")
 def api_data(table_name: str, start_date: str = "None",
