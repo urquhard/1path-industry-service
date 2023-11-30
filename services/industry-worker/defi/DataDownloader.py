@@ -163,24 +163,25 @@ def updateLlamaDataFrame(oldLlamaDF, chain_data, addresses_dict, update_file = F
     goodAddressTokens = pd.concat([notNanTokens, badAddressTokens]).drop_duplicates(keep = False).reset_index(drop = True)
     
     # Add new addresses if necessary
-    badAddressTokensList = list(badAddressTokens['gecko_id'])
-    tokensInAddressesDict = list(addresses_dict.keys())
-    tokensToAddToAddressesDict = [token for token in badAddressTokensList if token not in tokensInAddressesDict]
-    if len(tokensToAddToAddressesDict) != 0:
-        print('Adding new addresses...')
-        loop = tqdm(tokensToAddToAddressesDict, ascii = "-#")
-        for id in loop:
-            loop.set_description(f"Token {id}")
-            time.sleep(10)
-            addresses = get_coin_addresses(id)
-            addresses_dict[id] = addresses
-        print('Done!\n')
-        copy_addresses_dict = copy.deepcopy(addresses_dict)
-        updatedAddressesDF = pd.DataFrame([copy_addresses_dict.keys(), copy_addresses_dict.values()], index = [None, 'addresses']).transpose().set_index(None).sort_index()
-        updatedAddressesDF.to_csv('defi/tokenAddresses.csv')
-
-    # Update token addresses
-    badAddressTokens = fill_token_addresses(badTokens = badAddressTokens, tokenAddresses_dict = addresses_dict, chain_data = chain_data) 
+    if badAddressTokens.shape != (0,0):
+        badAddressTokensList = list(badAddressTokens['gecko_id'])
+        tokensInAddressesDict = list(addresses_dict.keys())
+        tokensToAddToAddressesDict = [token for token in badAddressTokensList if token not in tokensInAddressesDict]
+        if len(tokensToAddToAddressesDict) != 0:
+            print('Adding new addresses...')
+            loop = tqdm(tokensToAddToAddressesDict, ascii = "-#")
+            for id in loop:
+                loop.set_description(f"Token {id}")
+                time.sleep(10)
+                addresses = get_coin_addresses(id)
+                addresses_dict[id] = addresses
+            print('Done!\n')
+            copy_addresses_dict = copy.deepcopy(addresses_dict)
+            updatedAddressesDF = pd.DataFrame([copy_addresses_dict.keys(), copy_addresses_dict.values()], index = [None, 'addresses']).transpose().set_index(None).sort_index()
+            updatedAddressesDF.to_csv('defi/tokenAddresses.csv')
+    
+        # Update token addresses
+        badAddressTokens = fill_token_addresses(badTokens = badAddressTokens, tokenAddresses_dict = addresses_dict, chain_data = chain_data) 
     goodAddressTokens['address'] = goodAddressTokens['address'].apply(lambda x: update_good_address(x, mapping_dict))
 
     updatedTokenData = pd.concat([nanTokens, goodAddressTokens, badAddressTokens]).sort_values('symbol').reset_index(drop = True)
