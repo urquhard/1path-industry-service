@@ -205,14 +205,14 @@ def get_request_with_exceptions(full_endpoint, id, service):
             print(f"Error 404 occured: coin {id} not found")
             request_json = None
             if service == 'llama':
-                initialLlamaData = pd.read_csv('DefiLlamaData.csv')
+                initialLlamaData = pd.read_csv('defi/DefiLlamaData.csv')
                 initialLlamaData = initialLlamaData[initialLlamaData['slug'] != id].reset_index(drop = True)
-                initialLlamaData.to_csv('DefiLlamaData.csv', index = 0)
+                initialLlamaData.to_csv('defi/DefiLlamaData.csv', index = 0)
             elif service == 'gecko':
-                initialLlamaData = pd.read_csv('DefiLlamaData.csv')
+                initialLlamaData = pd.read_csv('defi/DefiLlamaData.csv')
                 initialLlamaData = initialLlamaData[initialLlamaData['gecko_id'] == id]['gecko_id'].iloc[0] = None
                 initialLlamaData = initialLlamaData[initialLlamaData['gecko_id'] == id]['id_collection'].iloc[0] = None
-                initialLlamaData.to_csv('DefiLlamaData.csv', index = 0)
+                initialLlamaData.to_csv('defi/DefiLlamaData.csv', index = 0)
             break
 
         elif (request.status_code == 429) and (service == 'gecko'):
