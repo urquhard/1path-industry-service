@@ -192,50 +192,70 @@ def updateLlamaDataFrame(oldLlamaDF, chain_data, addresses_dict, update_file = F
     return newLlamaDF
 
 
-def get_request_with_exceptions(full_endpoint, id):
+def get_request_with_exceptions(full_endpoint, id, service):
     # timeoutCount = 0
     while True:
         request = requests.get(full_endpoint)
-        try:
+
+        if request.status_code == 200:
             request_json = request.json()
-            if request.status_code == 429:
-                # if timeoutCount == 0:
-                    # print("Error 429 occured. Timeout")
-                time.sleep(7)
-                # timeoutCount += 1 
-            elif request.status_code == 404:
-                print(f"Error 404 occured: coin {id} not found")
-                request_json = None
-                break
-            else:
-                break
-        except Exception as error:
-            if (request.status_code == 502):
-                # if timeoutCount == 0:
-                #     print("Error 502 occured. Timeout")
-                time.sleep(7)
-                # timeoutCount += 1 
-            else:
-                print(f'Something wrong with {id}')
-                print(f'Request status code: {request.status_code}')
-                print(f'Error: {error}\n')
-                request_json = None
-                break
+            return request_json
+
+        elif request.status_code == 404:
+            print(f"Error 404 occured: coin {id} not found")
+            request_json = None
+            if service == 'llama':
+                initialLlamaData = pd.read_csv('DefiLlamaData.csv')
+                initialLlamaData = initialLlamaData[initialLlamaData['slug'] != id].reset_index(drop = True)
+                initialLlamaData.to_csv('DefiLlamaData.csv', index = 0)
+            elif service == 'gecko':
+                initialLlamaData = pd.read_csv('DefiLlamaData.csv')
+                initialLlamaData = initialLlamaData[initialLlamaData['gecko_id'] == id]['gecko_id'].iloc[0] = None
+                initialLlamaData = initialLlamaData[initialLlamaData['gecko_id'] == id]['id_collection'].iloc[0] = None
+                initialLlamaData.to_csv('DefiLlamaData.csv', index = 0)
+            break
+
+        elif (request.status_code == 429) and (service == 'gecko'):
+            # if timeoutCount == 0:
+                # print("Error 429 occured. Timeout")
+            time.sleep(7)
+            # timeoutCount += 1 
+
+        elif (request.status_code == 502):
+            # if timeoutCount == 0:
+            #     print("Error 502 occured. Timeout")
+            time.sleep(7)
+            # timeoutCount += 1 
+        
+        else:
+            print(f'Something wrong with {id}')
+            print(f'Request status code: {request.status_code}')
+            print(f'Error: {request.text}\n')
+            request_json = None
+            break
+        # else:
+        #     request_json = None
+        #     print("PIDARAS")
+        #     break
+        # try:
+        #     request_json = request.json()
+        # except Exception as error:
     # if timeoutCount != 0:
     #     print(f"No more error {request.status_code}. Moving back to downloading")
     return request_json
 
-
 def get_token_data_from_defillama(newLlamaDF, startDate, endDate):
     print('Downloading token TVL data from DefiLlama...')
     tvlDict = {}
+    missingLlamaTokens = []
     url = "https://api.llama.fi/protocol/"
     loop = tqdm(newLlamaDF['slug'].dropna(), ascii = "-#")
     for id in loop:
         loop.set_description(f"Token {id}")
         try:
-            rawSlugData = get_request_with_exceptions(full_endpoint = url + id, id = id)['chainTvls']
+            rawSlugData = get_request_with_exceptions(full_endpoint = url + id, id = id, service = 'llama')['chainTvls']
         except TypeError:
+            missingLlamaTokens.append(id)
             continue
         df = pd.DataFrame()
         for chain in rawSlugData.keys():
@@ -246,7 +266,7 @@ def get_token_data_from_defillama(newLlamaDF, startDate, endDate):
         df = df.dropna(axis = 1, how = 'all').sort_index().reindex(pd.date_range(startDate, endDate), fill_value = np.nan)
         tvlDict[id] = df
     print("Done!\n")
-    return tvlDict
+    return tvlDict, missingLlamaTokens
 
 
 def get_chain_data_from_defillama(newLlamaDF, startDate, endDate):
@@ -256,7 +276,7 @@ def get_chain_data_from_defillama(newLlamaDF, startDate, endDate):
     loop = tqdm(newLlamaDF[newLlamaDF['slug'].isna()]['chain'], ascii = "-#")
     for id in loop:
         loop.set_description(f"Chain {id}")
-        rawChainData = get_request_with_exceptions(full_endpoint = url + id, id = id)
+        rawChainData = get_request_with_exceptions(full_endpoint = url + id, id = id, service = 'llama')
         if rawChainData == None:
             continue
         df = pd.DataFrame()
@@ -272,16 +292,16 @@ def get_chain_data_from_defillama(newLlamaDF, startDate, endDate):
 def get_data_from_coingecko(newLlamaDF, startDate, endDate):
     print('Downloading token data from CoinGecko...')
     geckoDict = {}
-    missingTokens = []
+    missingGeckoTokens = []
     loop = tqdm(newLlamaDF['gecko_id'].unique(), ascii = "-#")
     for id in loop:
         loop.set_description(f"Token {id}")
         time.sleep(7)
         url = 'https://api.coingecko.com/api/v3/coins/' + id + '/market_chart?vs_currency=usd&days=max&interval=daily'
         
-        rawTokenData = pd.DataFrame(get_request_with_exceptions(full_endpoint = url, id = id))
+        rawTokenData = pd.DataFrame(get_request_with_exceptions(full_endpoint = url, id = id, service = 'gecko'))
         if rawTokenData.shape == (0, 0):
-            missingTokens.append(id)
+            missingGeckoTokens.append(id)
             continue
     
         rawTokenData = pd.concat([pd.DataFrame(rawTokenData[column].to_list(), columns = [None, column]) for column in rawTokenData.columns], axis = 1)
@@ -290,10 +310,10 @@ def get_data_from_coingecko(newLlamaDF, startDate, endDate):
         df = df.dropna(axis = 1, how = 'all').sort_index().reindex(pd.date_range(startDate, endDate), fill_value = np.nan)
         geckoDict[id] = df
     print("Done!\n")
-    return geckoDict, missingTokens
+    return geckoDict, missingGeckoTokens
 
 
-def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, missingTokens):
+def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, missingLlamaTokens, missingGeckoTokens):
     print('Merge collected data...')
     llamaData = copy.deepcopy(tokenInfoDF[['name', 'address', 'symbol', 'slug', 'gecko_id', 'category', 'id_collection', 'update_date']])
     tokenProtocolsList = [df for _, df in llamaData.groupby('gecko_id')]
@@ -305,7 +325,7 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
         gecko_id = protocols['gecko_id'].iloc[0]
         loop.set_description(f"Token {gecko_id}")
         df = pd.DataFrame()
-        if gecko_id in missingTokens:
+        if gecko_id in missingGeckoTokens:
             continue
         elif gecko_id in nativeChainTokenSeries.index:
             chain = nativeChainTokenSeries[gecko_id]
@@ -320,6 +340,8 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
             for i in range(len(protocols)):
                 minidf = protocols[i : i + 1]
                 llama_id = minidf['slug'].iloc[0]
+                if llama_id in missingLlamaTokens:
+                    continue
                 llamaDF = pd.melt(tokenLlamaDict[llama_id], value_vars = tokenLlamaDict[llama_id].columns, \
                                   value_name = 'TVL', var_name = 'chain', ignore_index = False).reset_index(names = 'date')
                 df = pd.concat([pd.concat([minidf] * len(llamaDF)).reset_index(drop = True), 
@@ -338,11 +360,11 @@ def all_together(oldLlamaDF, chain_data, addresses_dict, start_date, end_date, u
 
     newLlamaData = updateLlamaDataFrame(oldLlamaDF = oldLlamaDF, chain_data = chain_data, addresses_dict = addresses_dict, update_file = update_file)
     newLlamaData = newLlamaData[~newLlamaData['gecko_id'].isna()].reset_index(drop = True)
-    tokenLlamaData = get_token_data_from_defillama(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
+    tokenLlamaData, missingLlamaTokens = get_token_data_from_defillama(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
     chainLlamaData = get_chain_data_from_defillama(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
-    tokenGeckoData, missingTokens = get_data_from_coingecko(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
+    tokenGeckoData, missingGeckoTokens = get_data_from_coingecko(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
     finalData = merge_data(tokenInfoDF = newLlamaData, tokenLlamaDict = tokenLlamaData, chainLlamalDict = chainLlamaData, \
-                           tokenGeckoDict = tokenGeckoData, missingTokens = missingTokens)
+                           tokenGeckoDict = tokenGeckoData, missingGeckoTokens = missingGeckoTokens, missingLlamaTokens=missingLlamaTokens)
     return finalData
 
 
