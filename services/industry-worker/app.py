@@ -1,13 +1,14 @@
 import asyncio
 from sqlalchemy import create_engine
 import datetime
+from datetime import timedelta
 import pandas as pd
 from ast import literal_eval
 from web3 import Web3
 from web3.middleware import geth_poa_middleware
 import json
 
-from defi.DataDownloader import get_full_data
+from defi.DataDownloader import all_together
 from settings.env import env
 from defi.data import data
 from defi.model import factor_model
@@ -15,6 +16,20 @@ from defi.model import factor_model
 engine = create_engine(f"postgresql://{env.username}:{env.password}@{env.host}:5432/{env.database}")
 
 def update_data():
+    print("Started")
+    startDate = '2021-08-31'
+    endDate = (datetime.datetime.today() - timedelta(days = 1)).strftime('%Y-%m-%d')
+    oldLlamaData = pd.read_csv("defi/DefiLlamaData.csv")
+    chainData = pd.read_csv("defi/chainIdMapping.csv")
+    tokenAddressesDF = pd.read_csv('defi/tokenAddresses.csv', index_col = 0, converters = {'addresses': literal_eval})
+    tokenAddressesDict = dict(zip(tokenAddressesDF.index, tokenAddressesDF['addresses']))
+
+    full_dataframe = all_together(oldLlamaDF = oldLlamaData, chain_data = chainData, addresses_dict = tokenAddressesDict, start_date = startDate, end_date = endDate)
+    
+    full_dataframe.to_sql('test_data_3', engine, if_exists='replace', chunksize=100, method="multi")
+    full_dataframe.to_csv('defi/NASRAL.csv', index = False)
+    print("DONE-1")
+    """
     print("Started")
     oldLlamaData = pd.read_csv('defi/DefiLlamaData.csv', converters = {'id_collection': str})
     tokenAddressesDF = pd.read_csv('defi/tokenAddresses.csv', index_col = 0, converters = {'addresses': literal_eval})
@@ -27,6 +42,7 @@ def update_data():
     
     full_dataframe.to_sql('test_data_3', engine, if_exists='replace', chunksize=100, method="multi")
     print("DONE-1")
+    """
 
 def update_weights():
     df = pd.read_sql_table("test_data_3", engine, columns=["index", "date", "symbol", "gecko_id", "llama_id", "category", "chain", "address", "price", "market_cap", "volume", "TVL"])

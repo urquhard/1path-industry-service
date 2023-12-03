@@ -368,7 +368,7 @@ def all_together(oldLlamaDF, chain_data, addresses_dict, start_date, end_date, u
                            tokenGeckoDict = tokenGeckoData, missingGeckoTokens = missingGeckoTokens, missingLlamaTokens=missingLlamaTokens)
     return finalData
 
-
+"""
 startDate = '2021-08-31'
 endDate = (datetime.today() - timedelta(days = 1)).strftime('%Y-%m-%d')
 oldLlamaData = pd.read_csv("defi/DefiLlamaData.csv")
@@ -379,13 +379,8 @@ tokenAddressesDict = dict(zip(tokenAddressesDF.index, tokenAddressesDF['addresse
 full_dataframe = all_together(oldLlamaDF = oldLlamaData, chain_data = chainData, addresses_dict = tokenAddressesDict, start_date = startDate, end_date = endDate)
 
 full_dataframe.to_csv('defi/NASRAL.csv', index = False)
+"""
 
-
-
-### JSON, который нужен для телеги
-
-DNV = pd.read_csv('defi/NASRAL.csv')
-DNV = data.data_preparation(DNV)
 
 def get_telegram_dictionary(bigData, tokenAddresses):
     teleDict = {}
@@ -414,7 +409,8 @@ def get_telegram_dictionary(bigData, tokenAddresses):
             chainTokenInfoDict.append(microDict)
         teleDict[mapCorrectNames[chainName]] = chainTokenInfoDict
     return teleDict
-
+"""
 TeleDict = get_telegram_dictionary(bigData = DNV, tokenAddresses = tokenAddressesDict)
 with open('defi/TeleDict.json', 'w') as f:
     json.dump(TeleDict, f)
+    """
