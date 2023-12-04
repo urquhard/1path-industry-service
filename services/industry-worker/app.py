@@ -25,8 +25,8 @@ def update_data():
     tokenAddressesDict = dict(zip(tokenAddressesDF.index, tokenAddressesDF['addresses']))
 
     full_dataframe = all_together(oldLlamaDF = oldLlamaData, chain_data = chainData, addresses_dict = tokenAddressesDict, start_date = startDate, end_date = endDate)
-    
-    full_dataframe.to_sql('test_data_3', engine, if_exists='replace', chunksize=100, method="multi")
+    with engine.begin() as connection:    
+        full_dataframe.to_sql("test_data_3", con=connection, if_exists="replace", chunksize=100, method="multi")
     full_dataframe.to_csv('defi/NASRAL.csv', index = False)
     print("DONE-1")
     """
@@ -45,6 +45,7 @@ def update_data():
     """
 
 def update_weights():
+    print("Started updating weights")
     df = pd.read_sql_table("test_data_3", engine, columns=["index", "date", "symbol", "gecko_id", "llama_id", "category", "chain", "address", "price", "market_cap", "volume", "TVL"])
     
     df = data.data_preparation(df)
@@ -52,17 +53,19 @@ def update_weights():
     Beta, categories_columns, blockchain_columns, style_factors = data.beta_preparation(df, ret_copy, price_copy, mar_cap)
     industry_returns, x_frame, fitted_frame, resid_frame, p_value_data, res_test, vif_values, se, geckoId_to_symbol = factor_model(Beta, categories_columns, blockchain_columns, style_factors, "power", 0.25)
     res = []
-    res.append(Beta.to_sql("beta-1", engine, if_exists='replace', chunksize=100, method="multi"))
-    res.append(industry_returns.to_sql("industry_returns-1", engine, if_exists='replace', chunksize=100, method="multi"))
-    res.append(x_frame.to_sql("x_dict-1", engine, if_exists='replace', chunksize=100, method="multi"))
-    res.append(resid_frame.to_sql("resid_frame-1", engine, if_exists='replace', chunksize=100, method="multi"))
-    res.append(p_value_data.to_sql("p_value_data-1", engine, if_exists='replace', chunksize=100, method="multi"))
-    res.append(res_test.to_sql("res_test-1", engine, if_exists='replace', chunksize=100, method="multi"))
-    res.append(vif_values.to_sql("vif_values-1", engine, if_exists='replace', chunksize=100, method="multi"))
-    res.append(se.to_sql("se-1", engine, if_exists='replace', chunksize=100, method="multi"))
-    res.append(fitted_frame.to_sql("fitted_frame-1", engine, if_exists='replace', chunksize=100, method="multi"))
-    res.append(geckoId_to_symbol.to_sql("geckoId_to_symbol-1", engine, if_exists='replace', chunksize=100, method="multi"))
-    res.append(ret_copy.to_sql("ret_copy-1", engine, if_exists='replace', chunksize=100, method="multi"))
+    with engine.begin() as connection:    
+        res.append(Beta.to_sql("beta-1", con=connection, if_exists='replace', chunksize=100, method="multi"))
+        res.append(industry_returns.to_sql("industry_returns-1", con=connection, if_exists='replace', chunksize=100, method="multi"))
+        res.append(x_frame.to_sql("x_dict-1", con=connection, if_exists='replace', chunksize=100, method="multi"))
+        res.append(resid_frame.to_sql("resid_frame-1", con=connection, if_exists='replace', chunksize=100, method="multi"))
+        res.append(p_value_data.to_sql("p_value_data-1", con=connection, if_exists='replace', chunksize=100, method="multi"))
+        res.append(res_test.to_sql("res_test-1", con=connection, if_exists='replace', chunksize=100, method="multi"))
+        res.append(vif_values.to_sql("vif_values-1", con=connection, if_exists='replace', chunksize=100, method="multi"))
+        res.append(se.to_sql("se-1", con=connection, if_exists='replace', chunksize=100, method="multi"))
+        res.append(fitted_frame.to_sql("fitted_frame-1", con=connection, if_exists='replace', chunksize=100, method="multi"))
+        res.append(geckoId_to_symbol.to_sql("geckoId_to_symbol-1", con=connection, if_exists='replace', chunksize=100, method="multi"))
+        res.append(ret_copy.to_sql("ret_copy-1", con=connection, if_exists='replace', chunksize=100, method="multi"))
+    print("Ended updating weights")
 
 def update_shares():
     web3 = Web3(Web3.HTTPProvider(f"{env.bsc_http_provider_url}"))
