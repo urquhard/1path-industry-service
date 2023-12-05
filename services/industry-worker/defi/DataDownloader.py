@@ -317,10 +317,10 @@ def get_data_from_coingecko(newLlamaDF, startDate, endDate):
 
 def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, missingLlamaTokens, missingGeckoTokens):
     print('Merge collected data...')
-    gc.collect()
+    # gc.collect()
     llamaData = copy.deepcopy(tokenInfoDF[['name', 'address', 'symbol', 'slug', 'gecko_id', 'category', 'id_collection', 'update_date']])
     tokenProtocolsList = [df for _, df in llamaData.groupby('gecko_id')]
-    loop = tokenProtocolsList
+    loop = tqdm(tokenProtocolsList, ascii = "-#")
     nativeChainTokenSeries = pd.Series(['Avalanche', 'Binance', 'Ethereum', 'Polygon'],
                                index = ['avalanche-2', 'binancecoin', 'ethereum', 'matic-network'])
     # fullDataList = []
@@ -429,7 +429,7 @@ def all_together(oldLlamaDF, chain_data, addresses_dict, start_date, end_date, u
     tokenLlamaData, missingLlamaTokens = get_token_data_from_defillama(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
     chainLlamaData = get_chain_data_from_defillama(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
     tokenGeckoData, missingGeckoTokens = get_data_from_coingecko(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
-    finalData, loger = merge_data(tokenInfoDF = newLlamaData, tokenLlamaDict = tokenLlamaData, chainLlamalDict = chainLlamaData, \
+    finalData = merge_data(tokenInfoDF = newLlamaData, tokenLlamaDict = tokenLlamaData, chainLlamalDict = chainLlamaData, \
                            tokenGeckoDict = tokenGeckoData, missingGeckoTokens = missingGeckoTokens, missingLlamaTokens=missingLlamaTokens)
     return finalData
 
