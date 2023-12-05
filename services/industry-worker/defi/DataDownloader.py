@@ -8,6 +8,7 @@ from datetime import datetime
 from ast import literal_eval
 import time
 import copy
+import gc
 
 from .data import data
 from .addGeckoData import addGeckoData
@@ -313,15 +314,17 @@ def get_data_from_coingecko(newLlamaDF, startDate, endDate):
     print("Done!\n")
     return geckoDict, missingGeckoTokens
 
-'''
+
 def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, missingLlamaTokens, missingGeckoTokens):
     print('Merge collected data...')
+    gc.collect()
     llamaData = copy.deepcopy(tokenInfoDF[['name', 'address', 'symbol', 'slug', 'gecko_id', 'category', 'id_collection', 'update_date']])
     tokenProtocolsList = [df for _, df in llamaData.groupby('gecko_id')]
     loop = tqdm(tokenProtocolsList, ascii = "-#")
     nativeChainTokenSeries = pd.Series(['Avalanche', 'Binance', 'Ethereum', 'Polygon'],
                                index = ['avalanche-2', 'binancecoin', 'ethereum', 'matic-network'])
-    fullDataList = []
+    # fullDataList = []
+    fullDataDF = pd.DataFrame()
     for protocols in loop:
         gecko_id = protocols['gecko_id'].iloc[0]
         loop.set_description(f"Token {gecko_id}")
@@ -334,9 +337,9 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
             llamaDF = pd.melt(chainLlamalDict[chain], value_vars = [chain], \
                               value_name = 'TVL', var_name = 'chain', ignore_index = False).reset_index(names = 'date')
             df = pd.concat([pd.concat([protocols] * len(llamaDF)).reset_index(drop = True), geckoDF, llamaDF], axis = 1)
-            fullDataList.append(df)
+            fullDataDF = pd.concat([fullDataDF, df])
         else:
-            minilist = []
+            # minilist = []
             geckoDF = tokenGeckoDict[gecko_id].reset_index(drop = True)
             for i in range(len(protocols)):
                 minidf = protocols[i : i + 1]
@@ -347,22 +350,23 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
                                   value_name = 'TVL', var_name = 'chain', ignore_index = False).reset_index(names = 'date')
                 df = pd.concat([pd.concat([minidf] * len(llamaDF)).reset_index(drop = True), 
                                 pd.concat([geckoDF] * len(tokenLlamaDict[llama_id].columns)).reset_index(drop = True), llamaDF], axis = 1)
-                minilist.append(df)
-            fullDataList.append(pd.concat(minilist).reset_index(drop = True))
-    fullDataDF = pd.concat(fullDataList).reset_index(drop = True)
+                # minilist.append(df)
+                fullDataDF = pd.concat([fullDataDF, df])
+            # fullDataList.append(pd.concat(minilist).reset_index(drop = True))
+    # fullDataDF = pd.concat(fullDataList).reset_index(drop = True)
     fullDataDF = fullDataDF[['date', 'symbol', 'gecko_id', 'slug', 'category', 'chain', 'address', \
                              'id_collection', 'update_date', 'prices', 'market_caps', 'total_volumes', 'TVL']]
     fullDataDF = fullDataDF.rename(columns = {'slug': 'llama_id', 'prices': 'price', 'market_caps': 'market_cap', 'total_volumes': 'volume'})
     print("Done!")
     return fullDataDF
-'''
 
+'''
 def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, missingLlamaTokens, missingGeckoTokens):
     logger = []  # Use a list to store log messages
 
     logger.append('Merge collected data...')
-    llamaData = copy.deepcopy(tokenInfoDF[['name', 'address', 'symbol', 'slug', 'gecko_id', 'category', 'id_collection', 'update_date']])
-    tokenProtocolsList = [df for _, df in llamaData.groupby('gecko_id')]
+    # llamaData = copy.deepcopy(tokenInfoDF[['name', 'address', 'symbol', 'slug', 'gecko_id', 'category', 'id_collection', 'update_date']])
+    tokenProtocolsList = [df for _, df in tokenInfoDF.drop("chain").drop("tvl").groupby('gecko_id')]
     loop = tqdm(tokenProtocolsList, ascii="-#")
     
     nativeChainTokenSeries = pd.Series(['Avalanche', 'Binance', 'Ethereum', 'Polygon'],
@@ -382,9 +386,9 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
 
         if gecko_id in nativeChainTokenSeries.index:
             chain = nativeChainTokenSeries[gecko_id]
-            llamaDF = pd.melt(chainLlamalDict[chain], value_vars=[chain], value_name='TVL', var_name='chain',
-                              ignore_index=False).reset_index(names='date')
-            df = pd.concat([pd.concat([protocols] * len(llamaDF)).reset_index(drop=True), geckoDF, llamaDF], axis=1)
+            df = pd.concat([pd.concat([protocols] * len(pd.melt(chainLlamalDict[chain], value_vars=[chain], value_name='TVL', var_name='chain',
+                              ignore_index=False).reset_index(names='date'))).reset_index(drop=True), geckoDF, pd.melt(chainLlamalDict[chain], value_vars=[chain], value_name='TVL', var_name='chain',
+                                                ignore_index=False).reset_index(names='date')], axis=1)
         else:
             minilist = []
             for i in range(len(protocols)):
@@ -393,11 +397,11 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
                 if llama_id in missingLlamaTokens:
                     continue
 
-                llamaDF = pd.melt(tokenLlamaDict[llama_id], value_vars=tokenLlamaDict[llama_id].columns,
-                                  value_name='TVL', var_name='chain', ignore_index=False).reset_index(names='date')
-                df = pd.concat([pd.concat([minidf] * len(llamaDF)).reset_index(drop=True),
+                df = pd.concat([pd.concat([minidf] * len(pd.melt(tokenLlamaDict[llama_id], value_vars=tokenLlamaDict[llama_id].columns,
+                                  value_name='TVL', var_name='chain', ignore_index=False).reset_index(names='date'))).reset_index(drop=True),
                                 pd.concat([geckoDF] * len(tokenLlamaDict[llama_id].columns)).reset_index(drop=True),
-                                llamaDF], axis=1)
+                                pd.melt(tokenLlamaDict[llama_id], value_vars=tokenLlamaDict[llama_id].columns,
+                                                  value_name='TVL', var_name='chain', ignore_index=False).reset_index(names='date')], axis=1)
                 minilist.append(df)
 
             df = pd.concat(minilist).reset_index(drop=True)
@@ -413,7 +417,7 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
     logger.append("Done!")
 
     return fullDataDF, logger
-
+'''
 
 def all_together(oldLlamaDF, chain_data, addresses_dict, start_date, end_date, update_file = True):
 
