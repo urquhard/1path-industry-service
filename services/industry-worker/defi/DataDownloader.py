@@ -338,7 +338,7 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
                               value_name = 'TVL', var_name = 'chain', ignore_index = False).reset_index(names = 'date')
             df = pd.concat([pd.concat([protocols] * len(llamaDF)).reset_index(drop = True), geckoDF, llamaDF], axis = 1)
             fullDataDF = pd.concat([fullDataDF, df])
-            print("KALL", gecko_id)
+            # print("KALL", gecko_id)
         else:
             # minilist = []
             geckoDF = tokenGeckoDict[gecko_id].reset_index(drop = True)
@@ -353,7 +353,7 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
                                 pd.concat([geckoDF] * len(tokenLlamaDict[llama_id].columns)).reset_index(drop = True), llamaDF], axis = 1)
                 # minilist.append(df)
                 fullDataDF = pd.concat([fullDataDF, df])
-                print("GOVNO", llama_id)
+                # print("GOVNO", llama_id)
             # fullDataList.append(pd.concat(minilist).reset_index(drop = True))
     # fullDataDF = pd.concat(fullDataList).reset_index(drop = True)
     print("HUI")
@@ -425,7 +425,7 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
 def all_together(oldLlamaDF, chain_data, addresses_dict, start_date, end_date, update_file = True):
 
     newLlamaData = updateLlamaDataFrame(oldLlamaDF = oldLlamaDF, chain_data = chain_data, addresses_dict = addresses_dict, update_file = update_file)
-    newLlamaData = newLlamaData[~newLlamaData['gecko_id'].isna()].reset_index(drop = True)[:50]
+    newLlamaData = newLlamaData[~newLlamaData['gecko_id'].isna()].reset_index(drop = True)
     tokenLlamaData, missingLlamaTokens = get_token_data_from_defillama(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
     chainLlamaData = get_chain_data_from_defillama(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
     tokenGeckoData, missingGeckoTokens = get_data_from_coingecko(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
