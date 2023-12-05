@@ -313,7 +313,7 @@ def get_data_from_coingecko(newLlamaDF, startDate, endDate):
     print("Done!\n")
     return geckoDict, missingGeckoTokens
 
-
+'''
 def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, missingLlamaTokens, missingGeckoTokens):
     print('Merge collected data...')
     llamaData = copy.deepcopy(tokenInfoDF[['name', 'address', 'symbol', 'slug', 'gecko_id', 'category', 'id_collection', 'update_date']])
@@ -355,6 +355,64 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
     fullDataDF = fullDataDF.rename(columns = {'slug': 'llama_id', 'prices': 'price', 'market_caps': 'market_cap', 'total_volumes': 'volume'})
     print("Done!")
     return fullDataDF
+'''
+
+def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, missingLlamaTokens, missingGeckoTokens):
+    logger = []  # Use a list to store log messages
+
+    logger.append('Merge collected data...')
+    llamaData = copy.deepcopy(tokenInfoDF[['name', 'address', 'symbol', 'slug', 'gecko_id', 'category', 'id_collection', 'update_date']])
+    tokenProtocolsList = [df for _, df in llamaData.groupby('gecko_id')]
+    loop = tqdm(tokenProtocolsList, ascii="-#")
+    
+    nativeChainTokenSeries = pd.Series(['Avalanche', 'Binance', 'Ethereum', 'Polygon'],
+                                       index=['avalanche-2', 'binancecoin', 'ethereum', 'matic-network'])
+
+    fullDataList = []
+
+    for protocols in loop:
+        gecko_id = protocols['gecko_id'].loc[0]
+        loop.set_description(f"Token {gecko_id}")
+
+        if gecko_id in missingGeckoTokens:
+            continue
+
+        df = pd.DataFrame()
+        geckoDF = tokenGeckoDict[gecko_id].reset_index(drop=True)
+
+        if gecko_id in nativeChainTokenSeries.index:
+            chain = nativeChainTokenSeries[gecko_id]
+            llamaDF = pd.melt(chainLlamalDict[chain], value_vars=[chain], value_name='TVL', var_name='chain',
+                              ignore_index=False).reset_index(names='date')
+            df = pd.concat([pd.concat([protocols] * len(llamaDF)).reset_index(drop=True), geckoDF, llamaDF], axis=1)
+        else:
+            minilist = []
+            for i in range(len(protocols)):
+                minidf = protocols[i:i + 1]
+                llama_id = minidf['slug'].loc[0]
+                if llama_id in missingLlamaTokens:
+                    continue
+
+                llamaDF = pd.melt(tokenLlamaDict[llama_id], value_vars=tokenLlamaDict[llama_id].columns,
+                                  value_name='TVL', var_name='chain', ignore_index=False).reset_index(names='date')
+                df = pd.concat([pd.concat([minidf] * len(llamaDF)).reset_index(drop=True),
+                                pd.concat([geckoDF] * len(tokenLlamaDict[llama_id].columns)).reset_index(drop=True),
+                                llamaDF], axis=1)
+                minilist.append(df)
+
+            df = pd.concat(minilist).reset_index(drop=True)
+
+        fullDataList.append(df)
+
+    fullDataDF = pd.concat(fullDataList).reset_index(drop=True)
+    fullDataDF = fullDataDF[['date', 'symbol', 'gecko_id', 'slug', 'category', 'chain', 'address',
+                             'id_collection', 'update_date', 'prices', 'market_caps', 'total_volumes', 'TVL']]
+    fullDataDF = fullDataDF.rename(columns={'slug': 'llama_id', 'prices': 'price', 'market_caps': 'market_cap',
+                                            'total_volumes': 'volume'})
+
+    logger.append("Done!")
+
+    return fullDataDF, logger
 
 
 def all_together(oldLlamaDF, chain_data, addresses_dict, start_date, end_date, update_file = True):
@@ -364,7 +422,7 @@ def all_together(oldLlamaDF, chain_data, addresses_dict, start_date, end_date, u
     tokenLlamaData, missingLlamaTokens = get_token_data_from_defillama(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
     chainLlamaData = get_chain_data_from_defillama(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
     tokenGeckoData, missingGeckoTokens = get_data_from_coingecko(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
-    finalData = merge_data(tokenInfoDF = newLlamaData, tokenLlamaDict = tokenLlamaData, chainLlamalDict = chainLlamaData, \
+    finalData, loger = merge_data(tokenInfoDF = newLlamaData, tokenLlamaDict = tokenLlamaData, chainLlamalDict = chainLlamaData, \
                            tokenGeckoDict = tokenGeckoData, missingGeckoTokens = missingGeckoTokens, missingLlamaTokens=missingLlamaTokens)
     return finalData
 
