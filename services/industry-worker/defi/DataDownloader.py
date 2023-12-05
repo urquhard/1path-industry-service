@@ -422,7 +422,7 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
 def all_together(oldLlamaDF, chain_data, addresses_dict, start_date, end_date, update_file = True):
 
     newLlamaData = updateLlamaDataFrame(oldLlamaDF = oldLlamaDF, chain_data = chain_data, addresses_dict = addresses_dict, update_file = update_file)
-    newLlamaData = newLlamaData[~newLlamaData['gecko_id'].isna()].reset_index(drop = True)
+    newLlamaData = newLlamaData[~newLlamaData['gecko_id'].isna()].reset_index(drop = True)[:50]
     tokenLlamaData, missingLlamaTokens = get_token_data_from_defillama(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
     chainLlamaData = get_chain_data_from_defillama(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
     tokenGeckoData, missingGeckoTokens = get_data_from_coingecko(newLlamaDF = newLlamaData, startDate = start_date, endDate = end_date)
