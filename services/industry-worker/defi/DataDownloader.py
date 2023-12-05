@@ -320,7 +320,7 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
     gc.collect()
     llamaData = copy.deepcopy(tokenInfoDF[['name', 'address', 'symbol', 'slug', 'gecko_id', 'category', 'id_collection', 'update_date']])
     tokenProtocolsList = [df for _, df in llamaData.groupby('gecko_id')]
-    loop = tqdm(tokenProtocolsList, ascii = "-#")
+    loop = tokenProtocolsList
     nativeChainTokenSeries = pd.Series(['Avalanche', 'Binance', 'Ethereum', 'Polygon'],
                                index = ['avalanche-2', 'binancecoin', 'ethereum', 'matic-network'])
     # fullDataList = []
