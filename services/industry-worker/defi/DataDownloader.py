@@ -338,6 +338,7 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
                               value_name = 'TVL', var_name = 'chain', ignore_index = False).reset_index(names = 'date')
             df = pd.concat([pd.concat([protocols] * len(llamaDF)).reset_index(drop = True), geckoDF, llamaDF], axis = 1)
             fullDataDF = pd.concat([fullDataDF, df])
+            print("KALL", gecko_id)
         else:
             # minilist = []
             geckoDF = tokenGeckoDict[gecko_id].reset_index(drop = True)
@@ -352,8 +353,10 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
                                 pd.concat([geckoDF] * len(tokenLlamaDict[llama_id].columns)).reset_index(drop = True), llamaDF], axis = 1)
                 # minilist.append(df)
                 fullDataDF = pd.concat([fullDataDF, df])
+                print("GOVNO", llama_id)
             # fullDataList.append(pd.concat(minilist).reset_index(drop = True))
     # fullDataDF = pd.concat(fullDataList).reset_index(drop = True)
+    print("HUI")
     fullDataDF = fullDataDF[['date', 'symbol', 'gecko_id', 'slug', 'category', 'chain', 'address', \
                              'id_collection', 'update_date', 'prices', 'market_caps', 'total_volumes', 'TVL']]
     fullDataDF = fullDataDF.rename(columns = {'slug': 'llama_id', 'prices': 'price', 'market_caps': 'market_cap', 'total_volumes': 'volume'})

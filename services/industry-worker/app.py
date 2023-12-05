@@ -25,7 +25,8 @@ def update_data():
     tokenAddressesDict = dict(zip(tokenAddressesDF.index, tokenAddressesDF['addresses']))
 
     full_dataframe = all_together(oldLlamaDF = oldLlamaData, chain_data = chainData, addresses_dict = tokenAddressesDict, start_date = startDate, end_date = endDate)
-    with engine.begin() as connection:    
+    with engine.begin() as connection:
+        print("I\'m here")
         full_dataframe.to_sql("test_data_3", con=connection, if_exists="replace", chunksize=500, method="multi")
 
     print("DONE-1")
