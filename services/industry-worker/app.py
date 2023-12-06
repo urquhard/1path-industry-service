@@ -76,10 +76,10 @@ def update_shares():
     Vault = web3.eth.contract(address="0xbe9080Fe628F073633DC2dcFA9d3CC0cc38D4805", abi=VaultABI["abi"])
     sh_frame = pd.DataFrame(index = [], columns = ['1 share dollar value'])
     try:
-        sh_frame.loc[pd.to_datetime(datetime.now()).strftime('%Y-%m-%d %H-%M-%S')] = \
+        sh_frame.loc[pd.to_datetime(datetime.datetime.now()).strftime('%Y-%m-%d %H-%M-%S')] = \
         round(Vault.functions.exchangeRate().call() / 10 ** 18, 3)
     except:
-        sh_frame.loc[pd.to_datetime(datetime.now()).strftime('%Y-%m-%d %H-%M-%S')] = \
+        sh_frame.loc[pd.to_datetime(datetime.datetime.now()).strftime('%Y-%m-%d %H-%M-%S')] = \
         round(Vault.functions.exchangeRate().call() / 10 ** 18, 3)
     sh_frame.to_sql("share_perf_frame", engine, if_exists='append')
         
