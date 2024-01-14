@@ -212,22 +212,17 @@ def get_request_with_exceptions(full_endpoint, id, service):
                 initialLlamaData.to_csv('defi/DefiLlamaData.csv', index = 0)
             elif service == 'gecko':
                 initialLlamaData = pd.read_csv('defi/DefiLlamaData.csv')
-                initialLlamaData = initialLlamaData[initialLlamaData['gecko_id'] == id]['gecko_id'].iloc[0] = None
-                initialLlamaData = initialLlamaData[initialLlamaData['gecko_id'] == id]['id_collection'].iloc[0] = None
+                ind = initialLlamaData.index[initialLlamaData['gecko_id'] == id][0]
+                initialLlamaData['gecko_id'].loc[ind] = None
+                initialLlamaData['id_collection'].loc[ind] = None
                 initialLlamaData.to_csv('defi/DefiLlamaData.csv', index = 0)
             break
 
         elif (request.status_code == 429) and (service == 'gecko'):
-            # if timeoutCount == 0:
-                # print("Error 429 occured. Timeout")
             time.sleep(7)
-            # timeoutCount += 1 
 
         elif (request.status_code == 502):
-            # if timeoutCount == 0:
-            #     print("Error 502 occured. Timeout")
             time.sleep(7)
-            # timeoutCount += 1 
         
         else:
             print(f'Something wrong with {id}')
@@ -235,15 +230,6 @@ def get_request_with_exceptions(full_endpoint, id, service):
             print(f'Error: {request.text}\n')
             request_json = None
             break
-        # else:
-        #     request_json = None
-        #     print("PIDARAS")
-        #     break
-        # try:
-        #     request_json = request.json()
-        # except Exception as error:
-    # if timeoutCount != 0:
-    #     print(f"No more error {request.status_code}. Moving back to downloading")
     return request_json
 
 def get_token_data_from_defillama(newLlamaDF, startDate, endDate):

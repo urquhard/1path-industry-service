@@ -7,6 +7,8 @@ from ast import literal_eval
 from web3 import Web3
 from web3.middleware import geth_poa_middleware
 import json
+from prometheus_client import start_http_server, Gauge
+import time
 
 from defi.DataDownloader import all_together
 from settings.env import env
@@ -15,7 +17,12 @@ from defi.model import factor_model
 
 engine = create_engine(f"postgresql://{env.username}:{env.password}@{env.host}:5432/{env.database}")
 
+update_data_duration = Gauge('update_data_duration_seconds', 'Duration of update_data function')
+update_weights_duration = Gauge('update_weights_duration_seconds', 'Duration of update_weights function')
+update_shares_duration = Gauge('update_shares_duration_seconds', 'Duration of update_shares function')
+
 def update_data():
+    start_time = time.time()
     print("Started")
     startDate = '2021-08-31'
     endDate = (datetime.datetime.today() - timedelta(days = 1)).strftime('%Y-%m-%d')
@@ -30,6 +37,8 @@ def update_data():
         full_dataframe.to_sql("test_data_3", con=connection, if_exists="replace", chunksize=500, method="multi")
 
     print("DONE-1")
+    duration = time.time() - start_time
+    update_data_duration.set(duration)
     """
     print("Started")
     oldLlamaData = pd.read_csv('defi/DefiLlamaData.csv', converters = {'id_collection': str})
@@ -46,6 +55,7 @@ def update_data():
     """
 
 def update_weights():
+    start_time = time.time()
     print("Started updating weights")
     df = pd.read_sql_table("test_data_3", engine, columns=["index", "date", "symbol", "gecko_id", "llama_id", "category", "chain", "address", "price", "market_cap", "volume", "TVL"])
     
@@ -67,8 +77,11 @@ def update_weights():
         res.append(geckoId_to_symbol.to_sql("geckoId_to_symbol-1", con=connection, if_exists='replace', chunksize=100, method="multi"))
         res.append(ret_copy.to_sql("ret_copy-1", con=connection, if_exists='replace', chunksize=100, method="multi"))
     print("Ended updating weights")
+    duration = time.time() - start_time
+    update_weights_duration.set(duration)
 
 def update_shares():
+    start_time = time.time()
     web3 = Web3(Web3.HTTPProvider(f"{env.bsc_http_provider_url}"))
     web3.middleware_onion.inject(geth_poa_middleware, layer=0)
     with open("VaultV1.json") as f:
@@ -82,6 +95,8 @@ def update_shares():
         sh_frame.loc[pd.to_datetime(datetime.datetime.now()).strftime('%Y-%m-%d %H-%M-%S')] = \
         round(Vault.functions.exchangeRate().call() / 10 ** 18, 3)
     sh_frame.to_sql("share_perf_frame", engine, if_exists='append')
+    duration = time.time() - start_time
+    update_shares_duration.set(duration)
         
 # add timedelta depending on env.delay
 # add index validation
@@ -151,6 +166,9 @@ async def main():
             update_weights_scheduler(),
             update_shares_scheduler()
         )
+
+# Add Prometheus HTTP server
+start_http_server(8000)
 
 if __name__ == "__main__":
     asyncio.run(main())
