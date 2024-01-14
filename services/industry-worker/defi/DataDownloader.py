@@ -78,7 +78,10 @@ def fill_token_addresses(badTokens, tokenAddresses_dict, chain_data):
                         fineAddress = 'undefined-chain:' + value
             # case 1: (chain != '')
             if key != '':
-                geckoChainName = chain_data[chain_data['gecko_id'] == key]['name'].iloc[0]
+                try:
+                    geckoChainName = chain_data[chain_data['gecko_id'] == key]['name'].iloc[0]
+                except:
+                    continue
                 llamaChainNames = list(badTokens['chain'][badTokens['gecko_id'] == id])
                 try:
                     key = chain_data[chain_data['name'] == geckoChainName]['new_id'].iloc[0]
