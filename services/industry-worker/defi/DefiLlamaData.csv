@@ -5,7 +5,6 @@ AAVE V2,ethereum:0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9,AAVE,Multi-Chain,aav
 AAVE V3,ethereum:0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9,AAVE,Multi-Chain,aave-v3,aave,Lending,2193972146.772314,Manually,2023-09-09
 AAVE V1,ethereum:0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9,AAVE,Ethereum,aave-v1,aave,Lending,10539111.844946343,Manually,2023-09-09
 ABC Pool,conflux:0x905f2202003453006eaf975699545f2e909079b8,ABC,Conflux,abc-pool,abc-pos-pool,Staking Pool,4639172.16,Manually,2023-09-09
-Allbridge,celo:0x6e512BFC33be36F2666754E996ff103AD1680Cc9,ABR,Multi-Chain,allbridge,allbridge,Bridge,3609296.431475309,Automatically,2023-09-09
 Acala Swap,acala:-,ACA,Acala,acala-swap,acala,Dexes,2235488.568445396,Manually,2023-09-09
 Acala Liquid-Staking,acala:-,ACA,Acala,acala-liquid-staking,acala,Liquid Staking,9021896.490406413,Manually,2023-09-09
 Acala LCDOT,acala:-,ACA,Acala,acala-lcdot,acala,Liquid Staking,96464639.00109412,Manually,2023-09-09
@@ -361,11 +360,9 @@ Opium,ethereum:0x888888888889c00c67689029d7856aac1065ec11,OPIUM,Multi-Chain,opiu
 OraiDEX,-,ORAIX,Orai,oraidex,oraidex,Dexes,2931793.88293703,Automatically,2023-09-09
 Orbit Bridge,ethereum:0x662b67d00A13FAf93254714DD601F5Ed49Ef2F51,ORC,Multi-Chain,orbit-bridge,orbit-chain,Bridge,111329643.23940971,Automatically,2023-09-09
 Orca,solana:orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE,ORCA,Solana,orca,orca,Dexes,34458310.1750199,Automatically,2023-09-09
-Orion Protocol,ethereum:0x0258f474786ddfd37abce6df6bbb1dd5dfc4434a,ORN,Multi-Chain,orion-protocol,orion-protocol,Dexes,5047787.279954778,Automatically,2023-09-09
 Osmosis DEX,evmos:0xfa3c22c069b9556a4b2f7ece1ee3b467909f4864,OSMO,Osmosis,osmosis-dex,osmosis,Dexes,78468572.16285612,Automatically,2023-09-09
 Onchain Trade,zksync:0xD0eA21ba66B67bE636De1EC4bd9696EB8C61e9AA,OT,Multi-Chain,onchain-trade,onchain-trade-protocol,Derivatives,1163365.130254544,Automatically,2023-09-09
 Ouchi Finance,0xDe52a16C6DB7914e6953E27A7df4Ce6A315f8b45,OUCHI,Ethereum,ouchi-finance,,Dexes,7792612.100543779,None,2023-09-09
-Parallel Liquid Staking,-,PARA,Multi-Chain,parallel-liquid-staking,parallel-finance,Liquid Staking,5988308.918716064,Manually,2023-09-09
 PearlFi,polygon:0x7238390d5f6f64e67c3211c343a410e2a3dec142,PEARL,Polygon,pearlfi,pearl,Dexes,65786136.48201494,Automatically,2023-09-09
 Pendle,ethereum:0x808507121b80c02388fad14726482e061b8da827,PENDLE,Multi-Chain,pendle,pendle,Yield,143227643.6041677,Automatically,2023-09-09
 Perlin,ethereum:0xeca82185adce47f39c684352b0439f030f860318,PERL,Ethereum,perlin,perlin,Dexes,1741950.8827977602,Automatically,2023-09-09
@@ -580,7 +577,6 @@ WePiggy,ethereum:0x6f620ec89b8479e97a6985792d0c64f237566746,WPC,Multi-Chain,wepi
 Wrap Protocol,tezos:KT1LRboPna9yQY9BrjtQYDS1DVxhKESK4VVd,WRAP,Ethereum,wrap-protocol,wrap-governance-token,Synthetics,1000247.5407211228,Automatically,2023-09-11
 WingRiders,cardano:asset18v68f0vgv2nc3at8cuuem7f3fztwqcq2usgjyp,WRT,Cardano,wingriders,wingriders,Dexes,7699458.913443774,Automatically,2023-09-09
 Waterfall DeFi,binance-smart-chain:0xd73F32833B6D5D9c8070c23e599e283a3039823C,WTF,Multi-Chain,waterfall-defi,waterfall-governance-token,Yield Aggregator,3006434.79200707,Automatically,2023-09-09
-WX Network,waves:Atqv59EYzjFGuitKVnMRk6H8FukjoV3ktPorbEys25on,Waves.Exchange,Waves,wx-network,waves-exchange,Dexes,1842854.834242,Automatically,2023-09-09
 X2Y2,ethereum:0x1e4ede388cbc9f4b5c79681b7f94d36a11abebc9,X2Y2,Ethereum,x2y2,x2y2,NFT Lending,1035321.6692742498,Automatically,2023-09-09
 Onyx Protocol,0xA2cd3D43c775978A96BdBf12d733D5A1ED94fb18,XCN,Ethereum,onyx-protocol,,Lending,2857641.456556535,Manually,2023-09-09
 Mars Ecosystem,binance-smart-chain:0x7859b01bbf675d67da8cd128a50d155cd881b576,XMS,Binance,mars-ecosystem,mars-ecosystem-token,CDP,3225922.657111158,Automatically,2023-09-09

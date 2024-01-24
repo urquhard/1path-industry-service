@@ -338,8 +338,12 @@ def merge_data(tokenInfoDF, tokenLlamaDict, chainLlamalDict, tokenGeckoDict, mis
                     continue
                 llamaDF = pd.melt(tokenLlamaDict[llama_id], value_vars = tokenLlamaDict[llama_id].columns, \
                                   value_name = 'TVL', var_name = 'chain', ignore_index = False).reset_index(names = 'date')
-                df = pd.concat([pd.concat([minidf] * len(llamaDF)).reset_index(drop = True), 
-                                pd.concat([geckoDF] * len(tokenLlamaDict[llama_id].columns)).reset_index(drop = True), llamaDF], axis = 1)
+                try:
+                    df = pd.concat([pd.concat([minidf] * len(llamaDF)).reset_index(drop = True), 
+                                    pd.concat([geckoDF] * len(tokenLlamaDict[llama_id].columns)).reset_index(drop = True), llamaDF], axis = 1)
+                except:
+                    print(f"Token {gecko_id} has nothing to concat")
+                    continue
                 # minilist.append(df)
                 fullDataDF = pd.concat([fullDataDF, df])
                 # print("GOVNO", llama_id)
